@@ -1,10 +1,11 @@
 package com.nuaa.automaticallygeneratenetwork.pojo;
 
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+
 
 /**
  * @Author YZX
@@ -15,8 +16,12 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
+@Table(name = "OSPF")
 public class OSPF {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;//协议id
-    private ArrayList<String> neighbor;//邻接点的ip地址集合
-    private Integer routers_id;//协议所属路由器id
+    private String network;//邻接点的ip地址集合,用分号拆分不同的地址
+    private String routers_name;//协议所属路由器名称
 }

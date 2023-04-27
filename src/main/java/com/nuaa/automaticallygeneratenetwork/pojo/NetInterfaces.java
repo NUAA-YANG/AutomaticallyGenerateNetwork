@@ -1,5 +1,6 @@
 package com.nuaa.automaticallygeneratenetwork.pojo;
 
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
+@Table(name = "NetInterfaces")
 public class NetInterfaces {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;//接口id
     private String name;//接口名称
     private String ipAddress;//接口ip地址
     private Integer subnetMask;//接口子网掩码
-    private Integer routers_id;//接口所属路由器id
-    private Integer hosts_id;//接口所属主机id
+    private String lxd_name;//接口所属路由器或者主机名称
 }
