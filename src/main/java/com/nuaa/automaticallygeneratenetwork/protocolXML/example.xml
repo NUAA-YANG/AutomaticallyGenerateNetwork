@@ -1,0 +1,33 @@
+<Information>
+    <router><!--描述为路由器router或者主机host-->
+        <name>QR1</name>
+        <interfaces><!--描述接口信息-->
+            <interface><!--描述详细接口信息-->
+                <name>eth1</name>
+                <ipAddress>192.168.1.2</ipAddress>
+                <subnetMask>255.255.255.0</subnetMask>
+            </interface>
+            <interface>
+                <name>eth2</name>
+                <ip_address>192.168.1.1</ip_address>
+                <subnet_mask>255.255.255.0</subnet_mask>
+            </interface>
+        </interfaces>
+        <protocol><!--描述协议信息-->
+            <ospf>
+                <network id="1">192.168.1.0/24</network><!--ospf的邻接点-->
+                <network id="2">192.168.2.0/24</network>
+            </ospf>
+            <bgp>
+                <ans>100</ans><!--bgp自治域-->
+                <internal id="1">192.168.1.3</internal><!--bgp的入口流量-->
+                <internal id="2">192.168.1.4</internal>
+                <external id="1">192.168.1.5</external><!--bgp的出口流量-->
+                <external id="2">192.168.1.6</external>
+                <network id="1">192.168.1.0/24</network><!--bgp的邻接点-->
+                <network id="2">192.168.2.0/24</network>
+                <redistribute>ospf</redistribute><!--重转发网络协议-->
+            </bgp>
+        </protocol>
+    </router>
+</Information>
