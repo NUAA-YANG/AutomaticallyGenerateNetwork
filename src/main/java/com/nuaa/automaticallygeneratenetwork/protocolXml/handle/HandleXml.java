@@ -1,5 +1,7 @@
 package com.nuaa.automaticallygeneratenetwork.protocolXml.handle;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,6 +15,8 @@ import java.util.Map;
  * @Create 2023-04-27 15:27
  * @Java-version jdk1.8
  */
+@Service
+@Component
 //处理xml文本文件，将其转化为类对象
 public class HandleXml {
     public static void main(String[] args) {

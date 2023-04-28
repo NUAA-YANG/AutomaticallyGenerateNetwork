@@ -23,5 +23,5 @@ public class Hosts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;//主机id
     private String name;//主机名称
-    private String interfaces_id;//包含的接口id集合,用分号拆分不同的地址
+    private String interfacesId;//包含的接口id集合,用分号拆分不同的地址
 }

@@ -26,5 +26,5 @@ public class BGP {
     private String external;//bgp出口流量ip地址集合,用分号拆分不同的地址
     private String redistribute;//重转发协议
     private String network;//邻接点的ip地址集合,用分号拆分不同的地址
-    private String routers_name;//协议所属路由器名称
+    private String routersName;//协议所属路由器名称
 }

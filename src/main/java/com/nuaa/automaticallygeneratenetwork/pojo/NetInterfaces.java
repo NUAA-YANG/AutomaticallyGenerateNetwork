@@ -23,5 +23,5 @@ public class NetInterfaces {
     private String name;//接口名称
     private String ipAddress;//接口ip地址
     private Integer subnetMask;//接口子网掩码
-    private String lxd_name;//接口所属路由器或者主机名称
+    private String lxdName;//接口所属路由器或者主机名称
 }

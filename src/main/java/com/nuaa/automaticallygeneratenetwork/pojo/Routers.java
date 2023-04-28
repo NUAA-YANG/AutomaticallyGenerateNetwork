@@ -23,7 +23,7 @@ public class Routers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;//路由器id
     private String name;//路由器名称
-    private String interfaces_id;//包含的接口id集合,用分号拆分不同的地址
-    private Integer ospf_id;//ospf协议id
-    private Integer bgp_id;//bgp协议id
+    private String interfacesId;//包含的接口id集合,用分号拆分不同的地址
+    private Integer ospfId;//ospf协议id
+    private Integer bgpId;//bgp协议id
 }

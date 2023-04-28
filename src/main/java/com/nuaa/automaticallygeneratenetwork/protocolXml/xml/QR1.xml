@@ -23,7 +23,6 @@
         <ospf>
             <ospf_network><!--ospf的邻接点-->
                 <ip>192.168.80.0/24</ip>
-                <ip>192.168.80.1/24</ip>
             </ospf_network>
         </ospf>
         <bgp>
