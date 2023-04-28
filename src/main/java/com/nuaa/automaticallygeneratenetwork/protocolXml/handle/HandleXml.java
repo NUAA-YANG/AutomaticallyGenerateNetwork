@@ -1,11 +1,10 @@
-package com.nuaa.automaticallygeneratenetwork.protocolXml;
+package com.nuaa.automaticallygeneratenetwork.protocolXml.handle;
 
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class HandleXml {
 //        System.out.println("========================");
 //        System.out.println(properties.get("internal"));
 //        System.out.println("========================");
-        System.out.println(properties.get("ospf_network"));
+        System.out.println(properties.get("type"));
 //        System.out.println("========================");
 //        System.out.println(properties.get("bgp_network"));
 //                for (String key : properties.keySet()) {

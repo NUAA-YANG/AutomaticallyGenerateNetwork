@@ -1,9 +1,6 @@
-package com.nuaa.automaticallygeneratenetwork.protocolXml;
+package com.nuaa.automaticallygeneratenetwork.protocolXml.handle;
 
-import com.nuaa.automaticallygeneratenetwork.pojo.BGP;
-import com.nuaa.automaticallygeneratenetwork.pojo.NetInterfaces;
-import com.nuaa.automaticallygeneratenetwork.pojo.OSPF;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nuaa.automaticallygeneratenetwork.pojo.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +97,34 @@ public class HandleData {
         BGP bgp = new BGP(1, ans, internal, external, redistribute, network, lxd_name);
         return bgp;
     }
+
+    //处理router对象
+    public Routers HandleRouter(String pathName){
+        //获取处理xml文件的类
+        HandleXml handleXml = new HandleXml();
+        //获取处理的xml文件
+        Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
+        //获取路由器名称
+        String lxd_name = xmlFile.get("lxd_name");
+        //获取处理的接口集合对象->将接口对象存入数据库中，并且获得他们的id
+
+        //获取处理的OSPF对象->将接口对象存入数据库中，并且获得他们的id
+
+        //获取处理的BGP对象->将接口对象存入数据库中，并且获得他们的id
+
+        //创建实体类进行返回
+        return null;
+    }
+
+    //处理host对象
+    public Hosts HandleHost(String pathName){
+        //获取处理的接口集合对象->将接口对象存入数据库中，并且获得他们的id
+
+        //创建实体类进行返回
+
+        return null;
+    }
+
 
 
 

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Information>
-    <host><!--描述为路由器router或者主机host-->
-        <name>QH1</name>
-        <interfaces><!--描述接口信息-->
-            <interface><!--描述详细接口信息-->
-                <name>eth1</name>
-                <ipAddress>192.168.80.1</ipAddress>
-                <subnetMask>24</subnetMask>
-            </interface>
-        </interfaces>
-    </host>
+    <type>router</type><!--描述为路由器router或者主机host-->
+    <lxd_name>QH1</lxd_name>
+    <interfaces><!--描述接口信息-->
+        <interface><!--描述详细接口信息-->
+            <name>eth1</name>
+            <ipAddress>192.168.80.1</ipAddress>
+            <subnetMask>24</subnetMask>
+        </interface>
+    </interfaces>
 </Information>
