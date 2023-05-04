@@ -1,4 +1,4 @@
-package com.nuaa.automaticallygeneratenetwork.LinuxCommand;
+package com.nuaa.automaticallygeneratenetwork.linuxCommand;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -15,7 +15,12 @@ import org.springframework.stereotype.Service;
 //获取服务器的连接
 public class LinuxConnection {
 
-    //jsch创建连接
+    /***
+     * @description  jsch创建连接
+     * @date 2023/5/4 14:56
+     * @params [ip地址, port端口号, userName用户名, password密码]
+     * @returns Session 对象
+     */
     public Session getJSchSession(String ip , int port, String userName, String password){
         JSch jSch = new JSch();
         Session session = null;

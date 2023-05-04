@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +23,9 @@ public class HandleRH {
     @Autowired
     BGPService bgpService;
     @Autowired
-    HostsService hostsService;
-    @Autowired
     NetInterfacesService netInterfacesService;
     @Autowired
     OSPFService ospfService;
-    @Autowired
-    RoutersService routersService;
     @Autowired
     HandleXml handleXml;
     @Autowired
@@ -47,15 +44,12 @@ public class HandleRH {
     }
 
 
-
-    //处理router对象
+    //处理单个router对象
     public Routers HandleRouter(String pathName){
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取路由器名称
         String lxd_name = xmlFile.get("lxd_name");
-        //获得数据的处理对象
-        //HandleData handleData = new HandleData();
         //获取处理的接口集合对象->将接口对象存入数据库中，并且获得他们的id，拼接之后赋值给路由器
         String interfaces_id = "";
         List<NetInterfaces> netInterfacesList = handleData.HandleInter(pathName);//待插入对象集合
@@ -71,20 +65,24 @@ public class HandleRH {
         BGP bgp = handleData.HandleBgp(pathName);
         BGP saveBgp = bgpService.save(bgp);
         Integer bgp_id = saveBgp.getId();
-        //创建实体类->保存到数据库中并且返回
+        //单纯创建实体类并且返回
         Routers routers = new Routers(0,lxd_name,interfaces_id,ospf_id,bgp_id);
-        Routers saveRouters = routersService.save(routers);
-        return saveRouters;
+        return routers;
+
+        //创建实体类->保存到数据库中并且返回
+//        Routers saveRouters = routersService.save(routers);
+//        return saveRouters;
+
     }
 
-    //处理host对象
+
+
+    //处理单个host对象
     public Hosts HandleHost(String pathName){
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取主机名称
         String lxd_name = xmlFile.get("lxd_name");
-        //获得数据的处理对象
-        //HandleData handleData = new HandleData();
         //获取处理的接口集合对象->将接口对象存入数据库中，并且获得他们的id
         String interfaces_id = "";
         List<NetInterfaces> netInterfacesList = handleData.HandleInter(pathName);//待插入对象集合
@@ -92,9 +90,18 @@ public class HandleRH {
         for (NetInterfaces n:saveNetInterfacesList){
             interfaces_id += n.getId()+";";//开始拼接网口id
         }
-        //创建实体类->保存到数据库中并且返回
+        //单纯创建实体类并且返回
         Hosts hosts = new Hosts(0,lxd_name,interfaces_id);
-        Hosts saveHosts = hostsService.save(hosts);
-        return saveHosts;
+        return hosts;
+
+        //创建实体类->保存到数据库中并且返回
+//        Hosts saveHosts = hostsService.save(hosts);
+//        return saveHosts;
+
     }
+
+
+
+
+
 }

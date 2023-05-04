@@ -25,6 +25,10 @@ public class RoutersService {
     @Transactional
     public Routers save(Routers routers){return routersRepository.save(routers);}
 
+    //存储路由器列表
+    @Transactional
+    public List<Routers> saveList(List<Routers> routersList){return routersRepository.saveAll(routersList);}
+
     //根据id获得路由器
     @Transactional
     public Routers getById(Integer id){return routersRepository.findById(id).get();}

@@ -26,6 +26,10 @@ public class HostsService {
     @Transactional
     public Hosts save(Hosts hosts){return hostsRepository.save(hosts);}
 
+    //保存主机列表
+    @Transactional
+    public List<Hosts> saveList(List<Hosts> hostsList){return hostsRepository.saveAll(hostsList);}
+
     //根据id找到主机
     @Transactional
     public Hosts getById(Integer id){return hostsRepository.findById(id).get();}

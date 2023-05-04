@@ -1,4 +1,4 @@
-package com.nuaa.automaticallygeneratenetwork.LinuxCommand;
+package com.nuaa.automaticallygeneratenetwork.linuxCommand;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -23,8 +23,13 @@ import java.util.List;
 @Component
 //执行服务器cmd命令
 public class ExecLinuxCommands {
-    //用来执行命令
-    //Session表示传递连接对话,commands表示传递命令集合
+
+    /**
+     * @description  执行Linux命令
+     * @date 2023/5/4 14:58
+     * @params [session传递连接对话, commands传递命令集合]
+     * @returns List<String> 返回命令执行结果
+     */
     public List<String> getCmdResult(Session session , List<String> commands){
         //用来存放命令的返回值
         List<String> cmdResult = new ArrayList<>();
