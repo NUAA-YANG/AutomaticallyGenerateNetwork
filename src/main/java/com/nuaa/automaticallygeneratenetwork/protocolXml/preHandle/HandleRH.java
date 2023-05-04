@@ -1,4 +1,4 @@
-package com.nuaa.automaticallygeneratenetwork.protocolXml.handle;
+package com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle;
 
 import com.nuaa.automaticallygeneratenetwork.pojo.*;
 import com.nuaa.automaticallygeneratenetwork.service.*;

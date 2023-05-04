@@ -30,6 +30,10 @@ public class HostsService {
     @Transactional
     public Hosts getById(Integer id){return hostsRepository.findById(id).get();}
 
+    //根据名称查询
+    @Transactional
+    public Hosts getByName(String name){return hostsRepository.findHostsByName(name);}
+
     //查询所有
     @Transactional
     public List<Hosts> getList(){return hostsRepository.findAll();}

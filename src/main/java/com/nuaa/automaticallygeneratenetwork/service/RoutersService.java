@@ -29,6 +29,10 @@ public class RoutersService {
     @Transactional
     public Routers getById(Integer id){return routersRepository.findById(id).get();}
 
+    //根据名称获得路由器
+    @Transactional
+    public Routers getByName(String name){return routersRepository.findRoutersByName(name);}
+
     //查询所有
     @Transactional
     public List<Routers> getList(){return routersRepository.findAll();}

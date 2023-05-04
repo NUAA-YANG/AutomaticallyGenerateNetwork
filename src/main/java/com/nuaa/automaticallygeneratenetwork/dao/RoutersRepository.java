@@ -13,4 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 //接口继承实现Routers的增删改查
 public interface RoutersRepository extends JpaRepository<Routers,Integer>, JpaSpecificationExecutor<Routers> {
+
+    //根据路由器名称查询
+    Routers findRoutersByName(String name);
 }

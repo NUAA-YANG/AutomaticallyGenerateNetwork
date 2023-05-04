@@ -13,4 +13,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 //接口继承实现Hosts的增删改查
 public interface HostsRepository extends JpaRepository<Hosts,Integer>, JpaSpecificationExecutor<Hosts> {
+
+    //根据主机名称查询
+    Hosts findHostsByName(String name);
+
+
 }
