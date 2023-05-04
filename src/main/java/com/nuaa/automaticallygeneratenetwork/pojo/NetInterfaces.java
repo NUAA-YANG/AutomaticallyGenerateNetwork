@@ -24,4 +24,5 @@ public class NetInterfaces {
     private String ipAddress;//接口ip地址
     private Integer subnetMask;//接口子网掩码
     private String lxdName;//接口所属路由器或者主机名称
+    private Integer flag;//标识网桥的匹配，匹配成功为1，默认为0
 }

@@ -60,7 +60,7 @@ public class HandleData {
                 String name = split[i-2];//接口名称
                 String ipAddress = split[i-1];//接口ip地址
                 Integer subnetMask = Integer.parseInt(split[i]);//接口子网掩码
-                NetInterfaces inter = new NetInterfaces(0,name,ipAddress,subnetMask,lxd_name);
+                NetInterfaces inter = new NetInterfaces(0,name,ipAddress,subnetMask,lxd_name,0);
                 result.add(inter);
             }
         }

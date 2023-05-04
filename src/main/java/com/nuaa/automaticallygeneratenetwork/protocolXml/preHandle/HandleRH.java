@@ -32,9 +32,9 @@ public class HandleRH {
     HandleData handleData;
 
     public void testInsert(){
-        NetInterfaces n4 = new NetInterfaces(4,"eth4","4234",43,"测试四号");
-        NetInterfaces n5 = new NetInterfaces(4,"eth5","4234",43,"测试五号");
-        NetInterfaces n6 = new NetInterfaces(4,"eth6","4234",43,"测试六号");
+        NetInterfaces n4 = new NetInterfaces(4,"eth4","4234",43,"测试四号",0);
+        NetInterfaces n5 = new NetInterfaces(4,"eth5","4234",43,"测试五号",0);
+        NetInterfaces n6 = new NetInterfaces(4,"eth6","4234",43,"测试六号",0);
         List<NetInterfaces> list = new ArrayList<>();
         list.add(n4);
         list.add(n5);

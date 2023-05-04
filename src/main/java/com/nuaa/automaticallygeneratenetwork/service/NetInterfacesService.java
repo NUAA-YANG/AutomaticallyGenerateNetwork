@@ -42,6 +42,12 @@ public class NetInterfacesService {
         return netInterfacesRepository.findNetInterfacesByNameAndAndLxdName(name, lxd_name);
     }
 
+    //获取全部的网卡接口信息
+    @Transactional
+    public List<NetInterfaces> getList(){
+        return netInterfacesRepository.findAll();
+    }
+
     //根据容器名称找到全部的网卡接口
     @Transactional
     public List<NetInterfaces> getListByLxd_name(String lxd_name){
