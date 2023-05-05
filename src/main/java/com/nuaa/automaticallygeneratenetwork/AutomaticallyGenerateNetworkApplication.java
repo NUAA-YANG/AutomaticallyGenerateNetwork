@@ -17,7 +17,7 @@ import java.util.List;
 @EnableTransactionManagement
 public class AutomaticallyGenerateNetworkApplication {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         SpringApplication.run(AutomaticallyGenerateNetworkApplication.class, args);
         ApplicationContext context = SpringUtil.getApplicationContext();
 
@@ -35,20 +35,21 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
         /**2. 创建容器**/
-        CreateLxd createLxd = context.getBean(CreateLxd.class);
-        /** 2.1 测试从数据库获取路由器和主机信息*/
-        List<String> allHostName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml");
-        List<Hosts> hostsInfo = createLxd.getHostsInfo(allHostName);
-        List<String> allRouterName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
-        List<Routers> routersInfo = createLxd.getRoutersInfo(allRouterName);
-        /** 2.2 根据上述信息生成接口配置文件以及命令行*/
-        List<String> cmds = createLxd.createRH(routersInfo, hostsInfo);
-        cmds.forEach(x-> System.out.println(x));
+//        CreateLxd createLxd = context.getBean(CreateLxd.class);
+//        /** 2.1 测试从数据库获取路由器和主机信息*/
+//        List<String> allHostName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml");
+//        List<Hosts> hostsInfo = createLxd.getHostsInfo(allHostName);
+//        List<String> allRouterName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
+//        List<Routers> routersInfo = createLxd.getRoutersInfo(allRouterName);
+//        /** 2.2 根据上述信息生成接口配置文件以及命令行*/
+//        List<String> cmds = createLxd.createRH(routersInfo, hostsInfo);
+//        cmds.forEach(x-> System.out.println(x));
 
 
-        /**3. 创建网桥*/
+        /**3. 创建并且连接网桥*/
         CreateBridge createBridge = context.getBean(CreateBridge.class);
-
+        List<String> list = createBridge.CreateAndAttachBridge();
+        list.forEach(x-> System.out.println(x));
 
     }
 
