@@ -21,6 +21,8 @@ public class CreateBridge {
 
     @Autowired
     NetInterfacesService netInterfacesService;
+    @Autowired
+    CreateLxd createLxd;
 
     public static void main(String[] args) {
         CreateBridge createBridge = new CreateBridge();
@@ -39,10 +41,12 @@ public class CreateBridge {
 
 
     //创建命令行用于构建网桥以及连接网桥
-    public List<String> CreateAndAttachBridge() throws Exception {
+    public List<String> CreateAndAttachBridge(String hostPathName,String routerPathName) throws Exception {
         List<String> cmds = new ArrayList<>();
-        //1. 获取全部的接口信息
+        //1. 获取全部的接口以及当前配置文件对应的容器信息
         List<NetInterfaces> list = netInterfacesService.getList();
+        List<String> allHostName = createLxd.getAllLxdName(hostPathName);
+        List<String> allRouterName = createLxd.getAllLxdName(routerPathName);
         //2. 接口信息匹配
         List<String> bridge = new ArrayList<>();//用来记录网桥名称信息
         for (NetInterfaces n:list){
@@ -50,16 +54,20 @@ public class CreateBridge {
             if (searchInter==null){
                 throw new Exception("端口匹配失败");
             }
-            //创建网桥的名称
-            String bridgeName = n.getLxdName().compareTo(searchInter.getLxdName())>=0?(n.getLxdName()+searchInter.getLxdName()):(searchInter.getLxdName()+n.getLxdName());
-            //如果两个接口对应的容器名称都不存在
-            if (!bridge.contains(bridgeName)){
-                bridge.add(bridgeName);//添加网桥名称
-                //3. 创建网桥
-                cmds.add("lxc network create "+bridgeName+" ipv6.address=none ipv4.address=none;");
-                //4. 连接网桥(参数分别为网桥名称、容器名称以及容器网卡名称)
-                cmds.add("lxc network attach "+bridgeName+" "+n.getLxdName()+" "+n.getName()+";");
-                cmds.add("lxc network attach "+bridgeName+" "+searchInter.getLxdName()+" "+searchInter.getName()+";");
+            //只有两个接口所属的容器名称和当前容器配置文件名称对应,才可以创建网桥
+            if ((allHostName.contains(n.getLxdName()) || allRouterName.contains(n.getLxdName())) &&
+                    (allHostName.contains(searchInter.getLxdName()) || allRouterName.contains(searchInter.getLxdName())) ){
+                //创建网桥的名称
+                String bridgeName = n.getLxdName().compareTo(searchInter.getLxdName())>=0?(n.getLxdName()+searchInter.getLxdName()):(searchInter.getLxdName()+n.getLxdName());
+                //如果两个接口对应的容器名称都不存在
+                if (!bridge.contains(bridgeName)){
+                    bridge.add(bridgeName);//添加网桥名称
+                    //3. 创建网桥
+                    cmds.add("lxc network create "+bridgeName+" ipv6.address=none ipv4.address=none;");
+                    //4. 连接网桥(参数分别为网桥名称、容器名称以及容器网卡名称)
+                    cmds.add("lxc network attach "+bridgeName+" "+n.getLxdName()+" "+n.getName()+";");
+                    cmds.add("lxc network attach "+bridgeName+" "+searchInter.getLxdName()+" "+searchInter.getName()+";");
+                }
             }
         }
         return cmds;

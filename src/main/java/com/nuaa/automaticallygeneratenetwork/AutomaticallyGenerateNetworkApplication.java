@@ -35,21 +35,30 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
         /**2. 创建容器**/
-//        CreateLxd createLxd = context.getBean(CreateLxd.class);
-//        /** 2.1 测试从数据库获取路由器和主机信息*/
-//        List<String> allHostName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml");
-//        List<Hosts> hostsInfo = createLxd.getHostsInfo(allHostName);
-//        List<String> allRouterName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
-//        List<Routers> routersInfo = createLxd.getRoutersInfo(allRouterName);
-//        /** 2.2 根据上述信息生成接口配置文件以及命令行*/
-//        List<String> cmds = createLxd.createRH(routersInfo, hostsInfo);
-//        cmds.forEach(x-> System.out.println(x));
+        CreateLxd createLxd = context.getBean(CreateLxd.class);
+        /** 2.1 测试从数据库获取当前配置文件对应的路由器和主机信息*/
+        List<String> allHostName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml");
+        List<Hosts> hostsInfo = createLxd.getHostsInfo(allHostName);
+        List<String> allRouterName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
+        List<Routers> routersInfo = createLxd.getRoutersInfo(allRouterName);
+        /** 2.2 根据上述信息创建容器*/
+        List<String> cmds1 = createLxd.createRH(routersInfo, hostsInfo);
+        cmds1.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
 
 
         /**3. 创建并且连接网桥*/
         CreateBridge createBridge = context.getBean(CreateBridge.class);
-        List<String> list = createBridge.CreateAndAttachBridge();
-        list.forEach(x-> System.out.println(x));
+        List<String> cmds2 = createBridge.CreateAndAttachBridge("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml","src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
+        cmds2.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
+
+
+        /**4. 创建接口信息文件命令*/
+        CreateYaml createYaml = context.getBean(CreateYaml.class);
+        List<String> cmds3 = createYaml.createYL(routersInfo,hostsInfo);
+        cmds3.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
 
     }
 
