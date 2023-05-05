@@ -34,35 +34,35 @@ public class CreateYaml {
      * @params [interfacesId：拼接的接口id, lxdName：容器名称]
      * @returns void
      */
-    public void touchInterYaml(String interfacesId,String lxdName) throws IOException {
-        //创建输出流
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/java/com/nuaa/automaticallygeneratenetwork/io/netInterfaces/"+lxdName+"_10-lxc.yaml")));
-        String[] splitId = interfacesId.split(";");
-        //先写入固定的头文件
-        writer.write("network:\n" +
-                "  version: 2\n" +
-                "  ethernets:\n" +
-                "    eth0:\n" +
-                "      dhcp4: true\n" +
-                "      dhcp-identifier: mac\n");
-        writer.flush();
-        //开始写入接口描述
-        for (int i = 0 ; i<splitId.length;i++){
-            //获取每个接口信息
-            NetInterfaces netInterface = interfacesService.getById(Integer.parseInt(splitId[i]));
-            writer.write("    "+netInterface.getName()+":\n" +
-                    "      dhcp4: false\n" +
-                    "      dhcp-identifier: ["+netInterface.getIpAddress()+"/"+netInterface.getSubnetMask()+"]");
-            //如果不是最后一个接口信息，就输入换行
-            if (i!=(splitId.length-1)){
-                writer.write("\n");
-            }
-            writer.flush();
-        }
-        //防止未写入
-        writer.flush();
-        writer.close();
-    }
+//    public void touchInterYaml(String interfacesId,String lxdName) throws IOException {
+//        //创建输出流
+//        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/java/com/nuaa/automaticallygeneratenetwork/io/netInterfaces/"+lxdName+"_10-lxc.yaml")));
+//        String[] splitId = interfacesId.split(";");
+//        //先写入固定的头文件
+//        writer.write("network:\n" +
+//                "  version: 2\n" +
+//                "  ethernets:\n" +
+//                "    eth0:\n" +
+//                "      dhcp4: true\n" +
+//                "      dhcp-identifier: mac\n");
+//        writer.flush();
+//        //开始写入接口描述
+//        for (int i = 0 ; i<splitId.length;i++){
+//            //获取每个接口信息
+//            NetInterfaces netInterface = interfacesService.getById(Integer.parseInt(splitId[i]));
+//            writer.write("    "+netInterface.getName()+":\n" +
+//                    "      dhcp4: false\n" +
+//                    "      dhcp-identifier: ["+netInterface.getIpAddress()+"/"+netInterface.getSubnetMask()+"]");
+//            //如果不是最后一个接口信息，就输入换行
+//            if (i!=(splitId.length-1)){
+//                writer.write("\n");
+//            }
+//            writer.flush();
+//        }
+//        //防止未写入
+//        writer.flush();
+//        writer.close();
+//    }
 
     /**
      * @description 根据传入拼接的接口id在Linux上创建网络接口配置文件
@@ -70,7 +70,17 @@ public class CreateYaml {
      * @params [interfacesId：拼接的接口id, lxdName：容器名称]
      * @returns java.lang.String[] 第一个元素表示配置文件名称，第二个元素表示配置文件内容
      */
-    public String[] touchLinuxInterYaml(String interfacesId,String lxdName) throws IOException {
+    public String[] touchLinuxInterYaml(Object lxd) throws IOException {
+        //使用多态进行判断,保证了传入的参数简单
+        String lxdName = null;
+        String interfacesId = null;
+        if (lxd instanceof Routers){
+            lxdName = ((Routers) lxd).getName();
+            interfacesId = ((Routers) lxd).getInterfacesId();
+        } else if (lxd instanceof Hosts) {
+            lxdName = ((Hosts) lxd).getName();
+            interfacesId = ((Hosts) lxd).getInterfacesId();
+        }
         String interfaceFileName = lxdName+"_10-lxc.yaml";
         StringBuffer stringBuffer = new StringBuffer();
         String[] splitId = interfacesId.split(";");
@@ -104,7 +114,7 @@ public class CreateYaml {
         for (int i = 0 ; i<routersInfo.size() ; i++){
             Routers routers = routersInfo.get(i);
             //生成网口的配置文件
-            String[] routerYaml = touchLinuxInterYaml(routers.getInterfacesId(), routers.getName());
+            String[] routerYaml = touchLinuxInterYaml(routers);
             //将命令放入到集合中
             cmds.add("echo \""+routerYaml[1]+"\" > /root/"+routerYaml[0]);
         }
@@ -112,14 +122,12 @@ public class CreateYaml {
         for (int j = 0 ; j < hostsInfo.size() ; j++){
             Hosts hosts = hostsInfo.get(j);
             //生成网口的配置文件
-            String[] hostYaml = touchLinuxInterYaml(hosts.getInterfacesId(), hosts.getName());
+            String[] hostYaml = touchLinuxInterYaml(hosts);
             //将创建容器的命令放入到集合中
             cmds.add("echo \""+hostYaml[1]+"\" > /root/"+hostYaml[0]);
             //cmds.add("lxc copy YzxMouldLxd "+hosts.getName());
         }
         return cmds;
     }
-
-
 
 }

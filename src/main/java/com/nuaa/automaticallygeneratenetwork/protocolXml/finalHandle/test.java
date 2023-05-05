@@ -25,5 +25,9 @@ public class test {
 //        Collections.copy(arrayList2,arrayList1);
 //        System.out.println(arrayList2);
 
+        String[] split = ";192.168.81.1/24;192.168.83.1/24;".split(";");
+        System.out.println(split.length);
+        System.out.println(Arrays.toString(split));
+
     }
 }

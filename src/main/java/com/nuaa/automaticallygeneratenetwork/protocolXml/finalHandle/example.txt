@@ -1,0 +1,47 @@
+接口文件样例:
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp-identifier: mac
+    eth1:
+      dhcp4: false
+      dhcp-identifier: [192.168.82.2/24]
+    eth2:
+      dhcp4: false
+      dhcp-identifier: [192.168.83.2/24]
+
+
+frr配置文件样例:
+frr version 9.0-dev-MyOwnFRRVersion
+frr defaults traditional
+hostname Test
+log syslog informational
+service integrated-vtysh-config
+!
+router bgp 100
+no bgp ebgp-requires-policy
+neighbor 10.1.1.2 remote-as external
+neighbor 10.2.1.2 remote-as external
+neighbor 192.168.1.1 remote-as internal
+neighbor 192.168.2.1 remote-as internal
+!
+address-family ipv4 unicast
+network 10.1.0.0/16
+network 10.2.0.0/16
+redistribute ospf
+exit-address-family
+exit
+!
+router ospf
+network 192.168.1.0/24 area 0.0.0.0
+network 192.168.4.0/24 area 0.0.0.0
+exit
+!
+segment-routing
+traffic-eng
+exit
+exit
+!
+
