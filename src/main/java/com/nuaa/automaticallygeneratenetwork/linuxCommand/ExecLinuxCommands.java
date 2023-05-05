@@ -30,7 +30,7 @@ public class ExecLinuxCommands {
      * @params [session传递连接对话, commands传递命令集合]
      * @returns List<String> 返回命令执行结果
      */
-    public List<String> getCmdResult(Session session , List<String> commands){
+    public List<String> getCmdResult(Session session , List<String> commands) throws InterruptedException {
         //用来存放命令的返回值
         List<String> cmdResult = new ArrayList<>();
         for (String command : commands) {
@@ -68,6 +68,8 @@ public class ExecLinuxCommands {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //每次运行完一条命令休眠一会儿，让服务器响应
+            Thread.sleep(500);
         }
         return cmdResult;
     }

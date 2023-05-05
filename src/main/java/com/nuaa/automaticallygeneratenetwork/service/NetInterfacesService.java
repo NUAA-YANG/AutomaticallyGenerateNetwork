@@ -2,6 +2,7 @@ package com.nuaa.automaticallygeneratenetwork.service;
 
 import com.nuaa.automaticallygeneratenetwork.dao.NetInterfacesRepository;
 import com.nuaa.automaticallygeneratenetwork.pojo.NetInterfaces;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,19 @@ public class NetInterfacesService {
     @Transactional
     public List<NetInterfaces> saveList(List<NetInterfaces> netInterList){
         return netInterfacesRepository.saveAll(netInterList);}
+
+    //更新数据
+    @Transactional
+    public NetInterfaces update(Integer id ,NetInterfaces netInterfaces) throws Exception {
+        NetInterfaces n = netInterfacesRepository.findById(id).get();
+        if (n==null){
+            throw new Exception("不存在该网卡接口");
+        }
+        //复制对象
+        BeanUtils.copyProperties(netInterfaces,n);
+        //因为存在该id，所以再次储存的时候就相当于更新了数据
+        return netInterfacesRepository.save(n);
+    }
 
     //根据id找到网口
     @Transactional

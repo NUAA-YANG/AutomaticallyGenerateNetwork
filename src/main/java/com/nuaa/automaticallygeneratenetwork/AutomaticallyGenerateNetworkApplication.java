@@ -2,6 +2,7 @@ package com.nuaa.automaticallygeneratenetwork;
 
 import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
 import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateBridge;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateLxd;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateYaml;
 import org.springframework.boot.SpringApplication;
@@ -43,6 +44,12 @@ public class AutomaticallyGenerateNetworkApplication {
         /** 2.2 根据上述信息生成接口配置文件以及命令行*/
         List<String> cmds = createLxd.createRH(routersInfo, hostsInfo);
         cmds.forEach(x-> System.out.println(x));
+
+
+        /**3. 创建网桥*/
+        CreateBridge createBridge = context.getBean(CreateBridge.class);
+
+
     }
 
 }
