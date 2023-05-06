@@ -2,10 +2,7 @@ package com.nuaa.automaticallygeneratenetwork;
 
 import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
 import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateBridge;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateFrr;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateLxd;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateYaml;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -23,6 +20,11 @@ public class AutomaticallyGenerateNetworkApplication {
         ApplicationContext context = SpringUtil.getApplicationContext();
 
 
+        /**0. 定义配置文件所在位置*/
+        String routerPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml";
+        String hostPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml";
+
+
         /**1. 测试读取文件，插入相关路由器或主机信息**/
 //        HandleRHList handleRHList = context.getBean(HandleRHList.class);
 //        /** 1.1 测试插入路由器信息 */
@@ -36,37 +38,29 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
         /**2. 创建容器**/
-//        CreateLxd createLxd = context.getBean(CreateLxd.class);
-//        /** 2.1 测试从数据库获取当前配置文件对应的路由器和主机信息*/
-//        List<String> allHostName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml");
-//        List<Hosts> hostsInfo = createLxd.getHostsInfo(allHostName);
-//        List<String> allRouterName = createLxd.getAllLxdName("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
-//        List<Routers> routersInfo = createLxd.getRoutersInfo(allRouterName);
-//        /** 2.2 根据上述信息创建容器*/
-//        List<String> cmds1 = createLxd.createRH(routersInfo, hostsInfo);
-//        cmds1.forEach(x-> System.out.println(x));
-//        System.out.println("==========================================================");
+        CreateLxd createLxd = context.getBean(CreateLxd.class);
+        List<String> cmds1 = createLxd.createRH(routerPath, hostPath);
+        cmds1.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
 
 
         /**3. 创建并且连接网桥*/
-//        CreateBridge createBridge = context.getBean(CreateBridge.class);
-//        List<String> cmds2 = createBridge.CreateAndAttachBridge("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml","src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml");
-//        cmds2.forEach(x-> System.out.println(x));
-//        System.out.println("==========================================================");
+        CreateBridge createBridge = context.getBean(CreateBridge.class);
+        List<String> cmds2 = createBridge.CreateAndAttachBridge(routerPath,hostPath);
+        cmds2.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
 
 
         /**4. 创建接口信息文件命令*/
-//        CreateYaml createYaml = context.getBean(CreateYaml.class);
-//        List<String> cmds3 = createYaml.createYL(routersInfo,hostsInfo);
-//        cmds3.forEach(x-> System.out.println(x));
-//        System.out.println("==========================================================");
+        CreateYaml createYaml = context.getBean(CreateYaml.class);
+        List<String> cmds3 = createYaml.createYL(routerPath,hostPath);
+        cmds3.forEach(x-> System.out.println(x));
+        System.out.println("==========================================================");
 
         /**5. 创建frr.config配置文件*/
         CreateFrr createFrr = context.getBean(CreateFrr.class);
-        Routers routers = new Routers(6,"QR1","26;27;28",3,3);
-        String[] strings = createFrr.touchLinuxFrrConfig(routers);
-        System.out.println(strings[0]);
-        System.out.println(strings[1]);
+        List<String> cmds = createFrr.createFR(routerPath);
+        cmds.forEach(x-> System.out.println(x));
         System.out.println("==========================================================");
     }
 

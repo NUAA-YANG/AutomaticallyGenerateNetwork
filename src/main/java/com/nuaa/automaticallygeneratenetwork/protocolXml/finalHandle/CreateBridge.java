@@ -22,7 +22,7 @@ public class CreateBridge {
     @Autowired
     NetInterfacesService netInterfacesService;
     @Autowired
-    CreateLxd createLxd;
+    GetInfo getInfo;
 
     public static void main(String[] args) {
         CreateBridge createBridge = new CreateBridge();
@@ -41,12 +41,13 @@ public class CreateBridge {
 
 
     //创建命令行用于构建网桥以及连接网桥
-    public List<String> CreateAndAttachBridge(String hostPathName,String routerPathName) throws Exception {
+    public List<String> CreateAndAttachBridge(String routerPathName,String hostPathName) throws Exception {
         List<String> cmds = new ArrayList<>();
         //1. 获取全部的接口以及当前配置文件对应的容器信息
         List<NetInterfaces> list = netInterfacesService.getList();
-        List<String> allHostName = createLxd.getAllLxdName(hostPathName);
-        List<String> allRouterName = createLxd.getAllLxdName(routerPathName);
+        //查询当前配置文件对应的容器名称
+        List<String> allHostName = getInfo.getAllLxdName(hostPathName);
+        List<String> allRouterName = getInfo.getAllLxdName(routerPathName);
         //2. 接口信息匹配
         List<String> bridge = new ArrayList<>();//用来记录网桥名称信息
         for (NetInterfaces n:list){

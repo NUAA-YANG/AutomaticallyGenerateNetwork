@@ -14,7 +14,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * @Author YZX
  * @Create 2023-04-28 16:26
@@ -27,6 +26,12 @@ public class CreateYaml {
 
     @Autowired
     NetInterfacesService interfacesService;
+    @Autowired
+    GetInfo getInfo;
+    @Autowired
+    RoutersService routersService;
+    @Autowired
+    HostsService hostsService;
 
     /**
      * @description  根据传入拼接的接口id在本地创建网络接口配置文件
@@ -65,7 +70,7 @@ public class CreateYaml {
 //    }
 
     /**
-     * @description 根据传入拼接的接口id在Linux上创建网络接口配置文件
+     * @description 根据传入的容器信息创建网络接口配置文件
      * @date 2023/5/5 10:16
      * @params [interfacesId：拼接的接口id, lxdName：容器名称]
      * @returns java.lang.String[] 第一个元素表示配置文件名称，第二个元素表示配置文件内容
@@ -107,16 +112,24 @@ public class CreateYaml {
     }
 
 
-    //根据容器信息构造命令行对应容器的接口配置文件
-    public List<String> createYL(List<Routers> routersInfo,List<Hosts> hostsInfo) throws IOException {
+    //根据容器信息构造命令行对应全部容器的接口配置文件
+    public List<String> createYL(String routerPathName,String hostPathName) throws IOException {
         List<String> cmds = new ArrayList<>();
+        //查询当前配置文件对应的容器名称
+        List<String> allHostName = getInfo.getAllLxdName(hostPathName);
+        List<String> allRouterName = getInfo.getAllLxdName(routerPathName);
+        //根据容器名称获得容器信息
+        List<Routers> routersInfo = getInfo.getRoutersInfo(allRouterName);
+        List<Hosts> hostsInfo = getInfo.getHostsInfo(allHostName);
+        //先创建文件夹
+        cmds.add("mkdir /root/AutoNetwork/yaml");
         //构造路由器
         for (int i = 0 ; i<routersInfo.size() ; i++){
             Routers routers = routersInfo.get(i);
             //生成网口的配置文件
             String[] routerYaml = touchLinuxInterYaml(routers);
             //将命令放入到集合中
-            cmds.add("echo \""+routerYaml[1]+"\" > /root/"+routerYaml[0]);
+            cmds.add("echo \""+routerYaml[1]+"\" > /root/AutoNetwork/yaml/"+routerYaml[0]);
         }
         //构造主机
         for (int j = 0 ; j < hostsInfo.size() ; j++){
@@ -124,8 +137,7 @@ public class CreateYaml {
             //生成网口的配置文件
             String[] hostYaml = touchLinuxInterYaml(hosts);
             //将创建容器的命令放入到集合中
-            cmds.add("echo \""+hostYaml[1]+"\" > /root/"+hostYaml[0]);
-            //cmds.add("lxc copy YzxMouldLxd "+hosts.getName());
+            cmds.add("echo \""+hostYaml[1]+"\" > /root/AutoNetwork/yaml/"+hostYaml[0]);
         }
         return cmds;
     }

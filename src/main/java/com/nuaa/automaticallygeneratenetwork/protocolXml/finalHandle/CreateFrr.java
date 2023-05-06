@@ -5,9 +5,13 @@ import com.nuaa.automaticallygeneratenetwork.pojo.OSPF;
 import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
 import com.nuaa.automaticallygeneratenetwork.service.BGPService;
 import com.nuaa.automaticallygeneratenetwork.service.OSPFService;
+import com.nuaa.automaticallygeneratenetwork.service.RoutersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author YZX
@@ -20,11 +24,13 @@ import org.springframework.stereotype.Service;
 public class CreateFrr {
 
     @Autowired
-    CreateLxd createLxd;
-    @Autowired
     OSPFService ospfService;
     @Autowired
     BGPService bgpService;
+    @Autowired
+    GetInfo getInfo;
+    @Autowired
+    RoutersService routersService;
 
 
     /**
@@ -87,4 +93,28 @@ public class CreateFrr {
         return new String[]{frrFileName, String.valueOf(stringBuffer)};
     }
 
+    /**
+     * @description 根据传入的路由器信息构造出所有的frr配置文件
+     * @date 2023/5/6 10:04
+     * @params [routersList]：传入的路由器信息
+     * @returns java.util.List<java.lang.String>：返回命令集合列表
+     */
+    public List<String> createFR(String routerPathName){
+        List<String> cmds = new ArrayList<>();
+        //查询当前配置文件对应的容器名称
+        List<String> allRouterName = getInfo.getAllLxdName(routerPathName);
+        //根据容器名称获得路由器信息
+        List<Routers> routersInfo = getInfo.getRoutersInfo(allRouterName);
+        //先创建文件夹
+        cmds.add("mkdir /root/AutoNetwork/frr");
+        //构造路由器frr文件
+        for (int i = 0 ; i<routersInfo.size() ; i++){
+            Routers routers = routersInfo.get(i);
+            //frr文件
+            String[] routerFrr = touchLinuxFrrConfig(routers);
+            //将创建的命令放到集合中
+            cmds.add("echo \""+routerFrr[1]+"\" > /root/AutoNetwork/frr/"+routerFrr[0]);
+        }
+        return cmds;
+    }
 }
