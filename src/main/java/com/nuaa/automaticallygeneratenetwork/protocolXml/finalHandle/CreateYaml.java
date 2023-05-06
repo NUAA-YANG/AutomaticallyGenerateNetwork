@@ -121,23 +121,25 @@ public class CreateYaml {
         //根据容器名称获得容器信息
         List<Routers> routersInfo = getInfo.getRoutersInfo(allRouterName);
         List<Hosts> hostsInfo = getInfo.getHostsInfo(allHostName);
-        //先创建文件夹
-        cmds.add("mkdir /root/AutoNetwork/yaml");
         //构造路由器
         for (int i = 0 ; i<routersInfo.size() ; i++){
             Routers routers = routersInfo.get(i);
+            //针对每个路由器生成一个文件夹
+            cmds.add("mkdir -p /root/AutoNetwork/"+routers.getName());
             //生成网口的配置文件
             String[] routerYaml = touchLinuxInterYaml(routers);
             //将命令放入到集合中
-            cmds.add("echo \""+routerYaml[1]+"\" > /root/AutoNetwork/yaml/"+routerYaml[0]);
+            cmds.add("echo \""+routerYaml[1]+"\" > /root/AutoNetwork/"+routers.getName()+"/10-lxc.yaml");
         }
         //构造主机
         for (int j = 0 ; j < hostsInfo.size() ; j++){
             Hosts hosts = hostsInfo.get(j);
+            //针对每个主机生成一个文件夹
+            cmds.add("mkdir -p /root/AutoNetwork/"+hosts.getName());
             //生成网口的配置文件
             String[] hostYaml = touchLinuxInterYaml(hosts);
             //将创建容器的命令放入到集合中
-            cmds.add("echo \""+hostYaml[1]+"\" > /root/AutoNetwork/yaml/"+hostYaml[0]);
+            cmds.add("echo \""+hostYaml[1]+"\" > /root/AutoNetwork/"+hosts.getName()+"/10-lxc.yaml");
         }
         return cmds;
     }

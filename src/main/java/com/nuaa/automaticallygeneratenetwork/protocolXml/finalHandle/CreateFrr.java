@@ -105,15 +105,15 @@ public class CreateFrr {
         List<String> allRouterName = getInfo.getAllLxdName(routerPathName);
         //根据容器名称获得路由器信息
         List<Routers> routersInfo = getInfo.getRoutersInfo(allRouterName);
-        //先创建文件夹
-        cmds.add("mkdir /root/AutoNetwork/frr");
         //构造路由器frr文件
         for (int i = 0 ; i<routersInfo.size() ; i++){
             Routers routers = routersInfo.get(i);
+            //先创建文件夹
+            cmds.add("mkdir -p /root/AutoNetwork/"+routers.getName());
             //frr文件
             String[] routerFrr = touchLinuxFrrConfig(routers);
             //将创建的命令放到集合中
-            cmds.add("echo \""+routerFrr[1]+"\" > /root/AutoNetwork/frr/"+routerFrr[0]);
+            cmds.add("echo \""+routerFrr[1]+"\" > /root/AutoNetwork/"+routers.getName()+"/frr.conf");
         }
         return cmds;
     }

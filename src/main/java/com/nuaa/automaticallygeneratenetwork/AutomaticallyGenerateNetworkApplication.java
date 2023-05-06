@@ -1,5 +1,8 @@
 package com.nuaa.automaticallygeneratenetwork;
 
+import com.jcraft.jsch.Session;
+import com.nuaa.automaticallygeneratenetwork.linuxCommand.ExecLinuxCommands;
+import com.nuaa.automaticallygeneratenetwork.linuxCommand.LinuxConnection;
 import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
 import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.*;
@@ -20,9 +23,13 @@ public class AutomaticallyGenerateNetworkApplication {
         ApplicationContext context = SpringUtil.getApplicationContext();
 
 
-        /**0. 定义配置文件所在位置*/
+        /**0.0 定义配置文件所在位置*/
         String routerPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml";
         String hostPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml";
+        /**0.1 定义服务器的执行类*/
+//        LinuxConnection connection = context.getBean(LinuxConnection.class);
+//        Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
+//        ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
 
 
         /**1. 测试读取文件，插入相关路由器或主机信息**/
@@ -37,31 +44,41 @@ public class AutomaticallyGenerateNetworkApplication {
 //        System.out.println("主机信息插入成功:"+hosts);
 
 
-        /**2. 创建容器**/
+        System.out.println("=======================2. 创建容器成功===================================");
         CreateLxd createLxd = context.getBean(CreateLxd.class);
         List<String> cmds1 = createLxd.createRH(routerPath, hostPath);
-        cmds1.forEach(x-> System.out.println(x));
-        System.out.println("==========================================================");
+        //cmds1.forEach(x-> System.out.println(x));
 
 
-        /**3. 创建并且连接网桥*/
+
+        System.out.println("======================3. 创建网桥并且连接网桥成功===============================");
         CreateBridge createBridge = context.getBean(CreateBridge.class);
         List<String> cmds2 = createBridge.CreateAndAttachBridge(routerPath,hostPath);
-        cmds2.forEach(x-> System.out.println(x));
-        System.out.println("==========================================================");
+        //cmds2.forEach(x-> System.out.println(x));
 
 
-        /**4. 创建接口信息文件命令*/
+
+        System.out.println("========================4. 创建接口信息文件命令成功===========================");
         CreateYaml createYaml = context.getBean(CreateYaml.class);
         List<String> cmds3 = createYaml.createYL(routerPath,hostPath);
+        //execLinuxCommands.getCmdResult(session,cmds3);
         cmds3.forEach(x-> System.out.println(x));
-        System.out.println("==========================================================");
 
-        /**5. 创建frr.config配置文件*/
+
+        System.out.println("=========================5. 创建frr.config配置文件成功========================");
         CreateFrr createFrr = context.getBean(CreateFrr.class);
-        List<String> cmds = createFrr.createFR(routerPath);
-        cmds.forEach(x-> System.out.println(x));
-        System.out.println("==========================================================");
+        List<String> cmds4 = createFrr.createFR(routerPath);
+        //execLinuxCommands.getCmdResult(session,cmds4);
+        cmds4.forEach(x-> System.out.println(x));
+
+
+        System.out.println("=========================6. 替换配置配置文件成功========================");
+        FilePush filePush = context.getBean(FilePush.class);
+        List<String> cmds5 = filePush.pushYamlAndFrr(routerPath, hostPath);
+        cmds5.forEach(x-> System.out.println(x));
+
+        //关闭服务器连接
+        //connection.closeJSchSession(session);
     }
 
 }

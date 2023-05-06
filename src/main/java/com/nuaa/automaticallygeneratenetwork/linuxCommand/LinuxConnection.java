@@ -32,9 +32,9 @@ public class LinuxConnection {
             session.setConfig("StrictHostKeyChecking", "no");
             //启用连接
             session.connect();
-            //System.out.println("==================服务器连接成功===================");
+            //System.out.println("======================服务器连接成功=======================");
         }catch (Exception e){
-            throw new RuntimeException("==================服务器连接失败===================");
+            throw new RuntimeException("======================服务器连接失败=======================");
         }
         return session;
     }
@@ -44,9 +44,9 @@ public class LinuxConnection {
         if (session != null) {
             try {
                 session.disconnect();
-                System.out.println("================服务器连接关闭成功==================");
+                System.out.println("====================服务器连接关闭成功======================");
             }catch (Exception e){
-                throw new RuntimeException("==================服务器连接关闭失败===================");
+                throw new RuntimeException("======================服务器连接关闭失败=======================");
             }
         }
     }

@@ -56,7 +56,8 @@ public class ExecLinuxCommands {
                 }
                 //如果命令执行没有返回值，则直接输出没有返回值
                 if (String.valueOf(lines).equals("")){
-                    cmdResult.add("命令["+command+"]执行成功,但没有返回值");
+                    cmdResult.add("命令执行成功,但没有返回值");
+                    //cmdResult.add("命令["+command+"]执行成功,但没有返回值");
                 }else {
                     //否则将每行返回直接存入到list中
                     cmdResult.add(String.valueOf(lines));
