@@ -42,55 +42,71 @@ public class CreateFrr {
     public String[] touchLinuxFrrConfig(Routers routers){
         String frrFileName = routers.getName()+"_frr.config";
         StringBuffer stringBuffer = new StringBuffer();
-        //1. 获得bgp协议
-        BGP bgp = bgpService.getById(routers.getBgpId());
-        String[] externalIp = bgp.getExternal().split(";");
-        String[] internalIp = bgp.getInternal().split(";");
-        String[] bgpNetworkIp = bgp.getNetwork().split(";");
-        stringBuffer.append("hostname "+routers.getName()+"\n");
-        //1.1 开始遍历出入口流量
-        stringBuffer.append("!\n" +
-                "router bgp 100\n" +
-                " no bgp ebgp-requires-policy\n");
-        for (String eI:externalIp){
-            if (!eI.equals("")){
-                stringBuffer.append(" neighbor "+eI+" remote-as external\n");
+        if (routers.getBgpId()!=null){
+            //1. 获得bgp协议
+            BGP bgp = bgpService.getById(routers.getBgpId());
+            String[] externalIp = bgp.getExternal()!=null?bgp.getExternal().split(";"):null;
+            String[] internalIp = bgp.getInternal()!=null?bgp.getInternal().split(";"):null;
+            String[] bgpNetworkIp = bgp.getNetwork()!=null?bgp.getNetwork().split(";"):null;
+            stringBuffer.append("frr version 9.0-dev-MyOwnFRRVersion\n" +
+                    "frr defaults traditional\n" +
+                    "hostname "+routers.getName()+"\n" +
+                    "log syslog informational\n" +
+                    "service integrated-vtysh-config\n"+
+                    "!"+"\n");
+            //1.1 开始遍历出入口流量
+            if (bgp.getAns()!=null){
+                stringBuffer.append("router bgp "+bgp.getAns()+"\n");
             }
-        }
-        for (String iI:internalIp){
-            if (!iI.equals("")){
-                stringBuffer.append(" neighbor "+iI+" remote-as internal\n");
+            stringBuffer.append(" no bgp ebgp-requires-policy\n");
+            if (externalIp!=null){
+                for (String eI:externalIp){
+                    if (!eI.equals("")){
+                        stringBuffer.append(" neighbor "+eI+" remote-as external\n");
+                    }
+                }
             }
-        }
-        stringBuffer.append(" !\n" +
-                " address-family ipv4 unicast\n");
-        //1.2 开始遍历邻接ip
-        for (String bNI:bgpNetworkIp){
-            if (!bNI.equals("")){
-                stringBuffer.append("  network "+bNI+"\n");
+            if (internalIp!=null){
+                for (String iI:internalIp){
+                    if (!iI.equals("")){
+                        stringBuffer.append(" neighbor "+iI+" remote-as internal\n");
+                    }
+                }
             }
-        }
-        //1.3 添加重转发协议
-        stringBuffer.append("  redistribute "+bgp.getRedistribute()+"\n" +
-                " exit-address-family\n" +
-                "exit\n" +
-                "!\n");
-        //2. 获得ospf协议
-        OSPF ospf = ospfService.getById(routers.getOspfId());
-        String[] ospfNetworkIp = ospf.getNetwork().split(";");
-        stringBuffer.append("router ospf\n");
-        for (String oNI:ospfNetworkIp){
-            if (!oNI.equals("")){
-                stringBuffer.append(" network "+oNI+" area 0.0.0.0\n");
+            stringBuffer.append(" !\n" +
+                    " address-family ipv4 unicast\n");
+            //1.2 开始遍历邻接ip
+            for (String bNI:bgpNetworkIp){
+                if (!bNI.equals("")){
+                    stringBuffer.append("  network "+bNI+"\n");
+                }
             }
+            //1.3 添加重转发协议
+            if (bgp.getRedistribute()!=null){
+                stringBuffer.append("  redistribute "+bgp.getRedistribute()+"\n");
+            }
+            stringBuffer.append(" exit-address-family\n" +
+                    "exit\n" +
+                    "!\n");
         }
-        stringBuffer.append("exit\n" +
-                "!\n" +
-                "segment-routing\n" +
-                " traffic-eng\n" +
-                " exit\n" +
-                "exit\n" +
-                "!");
+        if (routers.getOspfId()!=null){
+            //2. 获得ospf协议
+            OSPF ospf = ospfService.getById(routers.getOspfId());
+            String[] ospfNetworkIp = ospf.getNetwork().split(";");
+            stringBuffer.append("router ospf\n");
+            for (String oNI:ospfNetworkIp){
+                if (!oNI.equals("")){
+                    stringBuffer.append(" network "+oNI+" area 0\n");
+                }
+            }
+            stringBuffer.append("exit\n" +
+                    "!\n" +
+                    "segment-routing\n" +
+                    " traffic-eng\n" +
+                    " exit\n" +
+                    "exit\n" +
+                    "!");
+        }
         return new String[]{frrFileName, String.valueOf(stringBuffer)};
     }
 

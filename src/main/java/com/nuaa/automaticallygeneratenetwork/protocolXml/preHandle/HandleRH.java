@@ -59,12 +59,18 @@ public class HandleRH {
         }
         //获取处理的OSPF对象->将接口对象存入数据库中，并且获得他们的id
         OSPF ospf = handleData.HandleOspf(pathName);
-        OSPF saveOspf = ospfService.save(ospf);
-        Integer ospf_id = saveOspf.getId();
+        Integer ospf_id = null;
+        if (ospf!=null){
+            OSPF saveOspf = ospfService.save(ospf);
+            ospf_id = saveOspf.getId();
+        }
         //获取处理的BGP对象->将接口对象存入数据库中，并且获得他们的id
         BGP bgp = handleData.HandleBgp(pathName);
-        BGP saveBgp = bgpService.save(bgp);
-        Integer bgp_id = saveBgp.getId();
+        Integer bgp_id = null;
+        if (bgp!=null){
+            BGP saveBgp = bgpService.save(bgp);
+            bgp_id = saveBgp.getId();
+        }
         //单纯创建实体类并且返回
         Routers routers = new Routers(0,lxd_name,interfaces_id,ospf_id,bgp_id);
         return routers;

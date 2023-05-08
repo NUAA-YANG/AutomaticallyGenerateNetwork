@@ -24,20 +24,20 @@ public class HandleData {
     HandleXml handleXml;
 
     public static void main(String[] args) {
-        String pathName = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/QR1.xml";
+        String pathName = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml/QR2.xml";
         HandleData handleData = new HandleData();
 
         //测试获取接口
-        List<NetInterfaces> list = handleData.HandleInter(pathName);
-        list.forEach(x-> System.out.println(x));
+//        List<NetInterfaces> list = handleData.HandleInter(pathName);
+//        list.forEach(x-> System.out.println(x));
 
         //测试获得ospf协议
-//        OSPF ospf = handleData.HandleOspf(pathName);
-//        System.out.println(ospf);
-//
-//        //测试获得bgp协议
-//        BGP bgp = handleData.HandleBgp(pathName);
-//        System.out.println(bgp);
+        OSPF ospf = handleData.HandleOspf(pathName);
+        System.out.println(ospf);
+
+        //测试获得bgp协议
+        BGP bgp = handleData.HandleBgp(pathName);
+        System.out.println(bgp);
 
     }
 
@@ -69,6 +69,7 @@ public class HandleData {
 
     //处理ospf协议
     public OSPF HandleOspf(String pathName){
+        HandleXml handleXml = new HandleXml();
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取协议所属容器名称
@@ -85,6 +86,7 @@ public class HandleData {
 
     //处理bgp协议
     public BGP HandleBgp(String pathName){
+        HandleXml handleXml = new HandleXml();
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取协议所属容器名称
@@ -93,17 +95,27 @@ public class HandleData {
         if (xmlFile.get("bgp")==null){
             return null;
         }
+        BGP bgp = new BGP(0, null, null, null, null, null, lxd_name);
         //获取协议所属自治域
-        Integer ans = Integer.parseInt(xmlFile.get("ans"));
+        if (xmlFile.get("ans")!=null){
+            bgp.setAns(Integer.parseInt(xmlFile.get("ans")));
+        }
         //获取协议所属重转发网络
-        String redistribute = xmlFile.get("redistribute");
+        if (xmlFile.get("redistribute")!=null){
+            bgp.setRedistribute(xmlFile.get("redistribute"));
+        }
         //获取入口流量ip信息->将信息中的空格全部替换为";"
-        String internal = xmlFile.get("internal").replaceAll("\\s+",";");
+        if (xmlFile.get("internal")!=null){
+            bgp.setInternal(xmlFile.get("internal").replaceAll("\\s+",";"));
+        }
         //获取出口流量ip信息->将信息中的空格全部替换为";"
-        String external = xmlFile.get("external").replaceAll("\\s+",";");
+        if (xmlFile.get("external")!=null){
+            bgp.setExternal(xmlFile.get("external").replaceAll("\\s+",";"));
+        }
         //获取存储网络邻接点信息->将信息中的空格全部替换为";"
-        String network = xmlFile.get("bgp_network").replaceAll("\\s+",";");
-        BGP bgp = new BGP(0, ans, internal, external, redistribute, network, lxd_name);
+        if (xmlFile.get("bgp_network")!=null){
+            bgp.setNetwork(xmlFile.get("bgp_network").replaceAll("\\s+",";"));
+        }
         return bgp;
     }
 

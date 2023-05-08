@@ -22,7 +22,7 @@ public class HandleXml {
     public static void main(String[] args) {
         HandleXml handleXml = new HandleXml();
         // 读取XML文件并打印所有属性
-        Map<String, String> properties = handleXml.readXMLFile("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/QR1.xml");
+        Map<String, String> properties = handleXml.readXMLFile("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml/QR2.xml");
 //        System.out.println("接口为:"+properties.get("interfaces"));
 //        System.out.println("ospf协议为:"+properties.get("ospf"));
 //        System.out.println("bgp协议为:"+properties.get("bgp"));
@@ -34,12 +34,15 @@ public class HandleXml {
 //        String[] splitBgp = bgp.split("\\s+");
 //        System.out.println(Arrays.toString(splitBgp));
 //        System.out.println("======================");
-//        System.out.println(properties.get("ans")+":"+properties.get("redistribute"));
+        System.out.println(properties.get("ans")+":"+properties.get("redistribute"));
+        if (properties.get("redistribute")==null){
+            System.out.println(properties.get("redistribute"));
+        }
 //        System.out.println(properties.get("external"));
 //        System.out.println("========================");
 //        System.out.println(properties.get("internal"));
 //        System.out.println("========================");
-        System.out.println(properties.get("type"));
+//        System.out.println(properties.get("type"));
 //        System.out.println("========================");
 //        System.out.println(properties.get("bgp_network"));
 //                for (String key : properties.keySet()) {

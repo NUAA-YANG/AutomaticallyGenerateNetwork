@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Information>
+    <type>router</type><!--描述为路由器router或者主机host-->
+    <lxd_name>QR0</lxd_name>
+    <interfaces><!--描述接口信息-->
+        <interface><!--描述详细接口信息-->
+            <name>eth1</name>
+            <ipAddress>192.168.85.1</ipAddress>
+            <subnetMask>24</subnetMask>
+        </interface>
+        <interface>
+            <name>eth2</name>
+            <ip_address>192.168.80.2</ip_address>
+            <subnet_mask>24</subnet_mask>
+        </interface>
+    </interfaces>
+    <protocol><!--描述协议信息-->
+        <ospf>
+            <ospf_network><!--ospf的邻接点-->
+                <ip>192.168.85.0/24</ip>
+            </ospf_network>
+        </ospf>
+    </protocol>
+</Information>

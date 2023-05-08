@@ -22,21 +22,21 @@
     <protocol><!--描述协议信息-->
         <ospf>
             <ospf_network><!--ospf的邻接点-->
-                <ip>192.168.82.0/24</ip>
                 <ip>192.168.84.0/24</ip>
             </ospf_network>
         </ospf>
         <bgp>
-            <ans>200</ans><!--bgp自治域-->
+            <ans>300</ans><!--bgp自治域-->
             <internal><!--bgp的入口流量-->
-                <ip>192.168.82.2</ip>
                 <ip>192.168.84.1</ip>
             </internal>
             <external><!--bgp的出口流量-->
+                <ip>192.168.82.2</ip>
                 <ip>192.168.81.1</ip>
             </external>
             <bgp_network><!--bgp的邻接点-->
                 <ip>192.168.81.0/24</ip>
+                <ip>192.168.82.0/24</ip>
             </bgp_network>
             <redistribute>ospf</redistribute><!--重转发网络协议-->
         </bgp>
