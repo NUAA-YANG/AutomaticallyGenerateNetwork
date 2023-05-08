@@ -70,7 +70,7 @@ public class ExecLinuxCommands {
                 throw new RuntimeException(e);
             }
             //每次运行完一条命令休眠一会儿，让服务器响应
-            Thread.sleep(500);
+            Thread.sleep(200);
         }
         return cmdResult;
     }

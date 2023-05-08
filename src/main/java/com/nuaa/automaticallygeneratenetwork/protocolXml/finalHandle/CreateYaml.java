@@ -32,6 +32,8 @@ public class CreateYaml {
     RoutersService routersService;
     @Autowired
     HostsService hostsService;
+    @Autowired
+    CreateBridge createBridge;
 
     /**
      * @description  根据传入拼接的接口id在本地创建网络接口配置文件
@@ -102,7 +104,15 @@ public class CreateYaml {
             NetInterfaces netInterface = interfacesService.getById(Integer.parseInt(splitId[i]));
             stringBuffer.append("    "+netInterface.getName()+":\n" +
                     "      dhcp4: false\n" +
-                    "      dhcp-identifier: ["+netInterface.getIpAddress()+"/"+netInterface.getSubnetMask()+"]");
+                    "      addresses: ["+netInterface.getIpAddress()+"/"+netInterface.getSubnetMask()+"]");
+            //如果是主机，那么需要添加网关
+            if (lxd instanceof Hosts){
+                stringBuffer.append("\n");
+                //为主机找到网关
+                NetInterfaces gateway4Inter = createBridge.matchIp(netInterface.getIpAddress(), netInterface.getSubnetMask(), interfacesService.getList());
+                stringBuffer.append("      gateway4: "+gateway4Inter.getIpAddress());
+
+            }
             //如果不是最后一个接口信息，就输入换行
             if (i!=(splitId.length-1)){
                 stringBuffer.append("\n");
@@ -126,6 +136,8 @@ public class CreateYaml {
             Routers routers = routersInfo.get(i);
             //针对每个路由器生成一个文件夹
             cmds.add("mkdir -p /root/AutoNetwork/"+routers.getName());
+            //开启路由器
+            //cmds.add("lxc start "+routers.getName());
             //生成网口的配置文件
             String[] routerYaml = touchLinuxInterYaml(routers);
             //将命令放入到集合中
@@ -136,6 +148,8 @@ public class CreateYaml {
             Hosts hosts = hostsInfo.get(j);
             //针对每个主机生成一个文件夹
             cmds.add("mkdir -p /root/AutoNetwork/"+hosts.getName());
+            //开启主机
+            //cmds.add("lxc start "+hosts.getName());
             //生成网口的配置文件
             String[] hostYaml = touchLinuxInterYaml(hosts);
             //将创建容器的命令放入到集合中

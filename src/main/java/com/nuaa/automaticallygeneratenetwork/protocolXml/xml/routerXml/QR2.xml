@@ -21,7 +21,7 @@
             </ospf_network>
         </ospf>
         <bgp>
-            <ans>100</ans><!--bgp自治域-->
+            <ans>200</ans><!--bgp自治域-->
             <internal><!--bgp的入口流量-->
                 <ip>192.168.82.1</ip>
             </internal>
@@ -29,7 +29,7 @@
                 <ip>192.168.83.1</ip>
             </external>
             <bgp_network><!--bgp的邻接点-->
-                <ip>192.168.83.2/24</ip>
+                <ip>192.168.83.0/24</ip>
             </bgp_network>
             <redistribute>ospf</redistribute><!--重转发网络协议-->
         </bgp>

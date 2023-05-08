@@ -38,7 +38,6 @@ public class HandleRHList {
         //遍历所有的文件，创造路由器对象
         for (String fileName:array){
             String pathName = parentName+"/"+fileName;
-            System.out.println(pathName);
             Routers routers = handleRH.HandleRouter(pathName);
             result.add(routers);
         }
@@ -60,7 +59,6 @@ public class HandleRHList {
         //遍历所有的文件，创造路由器对象
         for (String fileName:array){
             String pathName = parentName+"/"+fileName;
-            System.out.println(pathName);
             Hosts hosts = handleRH.HandleHost(pathName);
             result.add(hosts);
         }

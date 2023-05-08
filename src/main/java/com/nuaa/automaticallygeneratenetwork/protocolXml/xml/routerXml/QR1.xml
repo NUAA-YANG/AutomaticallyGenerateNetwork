@@ -35,8 +35,8 @@
                 <ip>192.168.83.2</ip>
             </external>
             <bgp_network><!--bgp的邻接点-->
-                <ip>192.168.81.1/24</ip>
-                <ip>192.168.83.1/24</ip>
+                <ip>192.168.81.0/24</ip>
+                <ip>192.168.83.0/24</ip>
             </bgp_network>
             <redistribute>ospf</redistribute><!--重转发网络协议-->
         </bgp>
