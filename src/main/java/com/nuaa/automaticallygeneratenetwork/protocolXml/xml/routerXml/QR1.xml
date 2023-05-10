@@ -23,6 +23,7 @@
         <ospf>
             <ospf_network><!--ospf的邻接点-->
                 <ip>192.168.81.0/24</ip>
+                <ospf_redistribute>bgp</ospf_redistribute><!--重转发网络协议-->
             </ospf_network>
         </ospf>
         <bgp>
@@ -39,7 +40,7 @@
                 <ip>192.168.82.0/24</ip>
                 <ip>192.168.83.0/24</ip>
             </bgp_network>
-            <redistribute>ospf</redistribute><!--重转发网络协议-->
+            <bgp_redistribute>ospf</bgp_redistribute><!--重转发网络协议-->
         </bgp>
     </protocol>
 </Information>

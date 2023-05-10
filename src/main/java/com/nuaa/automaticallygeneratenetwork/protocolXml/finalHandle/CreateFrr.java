@@ -42,6 +42,7 @@ public class CreateFrr {
     public String[] touchLinuxFrrConfig(Routers routers){
         String frrFileName = routers.getName()+"_frr.config";
         StringBuffer stringBuffer = new StringBuffer();
+        //添加固定头文件
         stringBuffer.append("frr version 9.0-dev-MyOwnFRRVersion\n" +
                 "frr defaults traditional\n" +
                 "hostname "+routers.getName()+"\n" +
@@ -94,10 +95,15 @@ public class CreateFrr {
             OSPF ospf = ospfService.getById(routers.getOspfId());
             String[] ospfNetworkIp = ospf.getNetwork().split(";");
             stringBuffer.append("router ospf\n");
+            //2.1 遍历邻接节点
             for (String oNI:ospfNetworkIp){
                 if (!oNI.equals("")){
                     stringBuffer.append(" network "+oNI+" area 0\n");
                 }
+            }
+            //2.2 添加重转发协议
+            if (ospf.getRedistribute()!=null){
+                stringBuffer.append("  redistribute "+ospf.getRedistribute()+"\n");
             }
             stringBuffer.append("exit\n" +
                     "!\n" +

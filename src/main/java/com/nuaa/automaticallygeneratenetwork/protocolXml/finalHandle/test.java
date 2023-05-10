@@ -29,5 +29,8 @@ public class test {
         System.out.println(split.length);
         System.out.println(Arrays.toString(split));
 
+
+        System.out.println("echo \""+"#!/bin/bash"+"\" >> /root/AutoNetwork/LxdBash.sh");
+
     }
 }

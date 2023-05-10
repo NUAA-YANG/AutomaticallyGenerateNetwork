@@ -23,5 +23,6 @@ public class OSPF {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;//协议id
     private String network;//邻接点的ip地址集合,用分号拆分不同的地址
+    private String redistribute;//重转发协议
     private String routersName;//协议所属路由器名称
 }

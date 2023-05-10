@@ -69,7 +69,7 @@ public class HandleData {
 
     //处理ospf协议
     public OSPF HandleOspf(String pathName){
-        HandleXml handleXml = new HandleXml();
+        //HandleXml handleXml = new HandleXml();
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取协议所属容器名称
@@ -80,13 +80,16 @@ public class HandleData {
         }
         //获取存储网络邻接点信息->将信息中的空格全部替换为";"
         String network = xmlFile.get("ospf_network").replaceAll("\\s+",";");
-        OSPF ospf = new OSPF(0,network,lxd_name);
+        OSPF ospf = new OSPF(0,network,null,lxd_name);
+        if (xmlFile.get("ospf_redistribute")!=null){
+            ospf.setRedistribute(xmlFile.get("ospf_redistribute"));
+        }
         return ospf;
     }
 
     //处理bgp协议
     public BGP HandleBgp(String pathName){
-        HandleXml handleXml = new HandleXml();
+        //HandleXml handleXml = new HandleXml();
         //获取处理的xml文件
         Map<String, String> xmlFile = handleXml.readXMLFile(pathName);
         //获取协议所属容器名称
@@ -101,8 +104,8 @@ public class HandleData {
             bgp.setAns(Integer.parseInt(xmlFile.get("ans")));
         }
         //获取协议所属重转发网络
-        if (xmlFile.get("redistribute")!=null){
-            bgp.setRedistribute(xmlFile.get("redistribute"));
+        if (xmlFile.get("bgp_redistribute")!=null){
+            bgp.setRedistribute(xmlFile.get("bgp_redistribute"));
         }
         //获取入口流量ip信息->将信息中的空格全部替换为";"
         if (xmlFile.get("internal")!=null){
