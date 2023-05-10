@@ -59,7 +59,7 @@ public class CreateBridge {
             if ((allHostName.contains(n.getLxdName()) || allRouterName.contains(n.getLxdName())) &&
                     (allHostName.contains(searchInter.getLxdName()) || allRouterName.contains(searchInter.getLxdName())) ){
                 //创建网桥的名称
-                String bridgeName = n.getLxdName().compareTo(searchInter.getLxdName())>=0?(n.getLxdName()+searchInter.getLxdName()):(searchInter.getLxdName()+n.getLxdName());
+                String bridgeName = n.getLxdName().compareTo(searchInter.getLxdName())<=0?(n.getLxdName()+searchInter.getLxdName()):(searchInter.getLxdName()+n.getLxdName());
                 //如果两个接口对应的容器名称都不存在
                 if (!bridge.contains(bridgeName)){
                     bridge.add(bridgeName);//添加网桥名称

@@ -42,18 +42,18 @@ public class CreateFrr {
     public String[] touchLinuxFrrConfig(Routers routers){
         String frrFileName = routers.getName()+"_frr.config";
         StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("frr version 9.0-dev-MyOwnFRRVersion\n" +
+                "frr defaults traditional\n" +
+                "hostname "+routers.getName()+"\n" +
+                "log syslog informational\n" +
+                "service integrated-vtysh-config\n"+
+                "!"+"\n");
         if (routers.getBgpId()!=null){
             //1. 获得bgp协议
             BGP bgp = bgpService.getById(routers.getBgpId());
             String[] externalIp = bgp.getExternal()!=null?bgp.getExternal().split(";"):null;
             String[] internalIp = bgp.getInternal()!=null?bgp.getInternal().split(";"):null;
             String[] bgpNetworkIp = bgp.getNetwork()!=null?bgp.getNetwork().split(";"):null;
-            stringBuffer.append("frr version 9.0-dev-MyOwnFRRVersion\n" +
-                    "frr defaults traditional\n" +
-                    "hostname "+routers.getName()+"\n" +
-                    "log syslog informational\n" +
-                    "service integrated-vtysh-config\n"+
-                    "!"+"\n");
             //1.1 开始遍历出入口流量
             if (bgp.getAns()!=null){
                 stringBuffer.append("router bgp "+bgp.getAns()+"\n");
