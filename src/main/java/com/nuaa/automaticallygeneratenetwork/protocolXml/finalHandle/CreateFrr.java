@@ -103,7 +103,7 @@ public class CreateFrr {
             }
             //2.2 添加重转发协议
             if (ospf.getRedistribute()!=null){
-                stringBuffer.append("  redistribute "+ospf.getRedistribute()+"\n");
+                stringBuffer.append(" redistribute "+ospf.getRedistribute()+"\n");
             }
             stringBuffer.append("exit\n" +
                     "!\n" +

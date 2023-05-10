@@ -95,6 +95,8 @@ public class LxdBash {
         return cmds;
     }
 
+    //删除所有的网桥
+
     //重启所有的网络
     public List<String> NetplanApply(String routerPathName, String hostPathName){
         List<String> cmds = new ArrayList<>();

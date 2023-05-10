@@ -40,8 +40,14 @@ public class CreateBridge {
     }
 
 
-    //创建命令行用于构建网桥以及连接网桥
+    /**
+     * @description  创建命令行用于构建网桥以及连接网桥
+     * @date 2023/5/10 10:25
+     * @params [routerPathName, hostPathName]
+     * @returns java.util.List<java.util.List<java.lang.String>> 返回[0]号元素是网桥的创建命令，返回[1]号元素是所有网桥的名称
+     */
     public List<String> CreateAndAttachBridge(String routerPathName,String hostPathName) throws Exception {
+        //返回网桥的创建语句
         List<String> cmds = new ArrayList<>();
         //1. 获取全部的接口以及当前配置文件对应的容器信息
         List<NetInterfaces> list = netInterfacesService.getList();

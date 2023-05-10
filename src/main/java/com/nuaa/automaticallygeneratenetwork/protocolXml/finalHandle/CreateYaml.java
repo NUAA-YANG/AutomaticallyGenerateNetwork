@@ -136,8 +136,6 @@ public class CreateYaml {
             Routers routers = routersInfo.get(i);
             //针对每个路由器生成一个文件夹
             cmds.add("mkdir -p /root/AutoNetwork/"+routers.getName());
-            //开启路由器
-            //cmds.add("lxc start "+routers.getName());
             //生成网口的配置文件
             String[] routerYaml = touchLinuxInterYaml(routers);
             //将命令放入到集合中
@@ -148,8 +146,6 @@ public class CreateYaml {
             Hosts hosts = hostsInfo.get(j);
             //针对每个主机生成一个文件夹
             cmds.add("mkdir -p /root/AutoNetwork/"+hosts.getName());
-            //开启主机
-            //cmds.add("lxc start "+hosts.getName());
             //生成网口的配置文件
             String[] hostYaml = touchLinuxInterYaml(hosts);
             //将创建容器的命令放入到集合中

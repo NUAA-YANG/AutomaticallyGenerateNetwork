@@ -33,9 +33,9 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
         System.out.println("=========================1. 数据库写入容器信息===============================");
-        HandleRHList handleRHList = context.getBean(HandleRHList.class);
-        List<Routers> routers = handleRHList.HandleRouterList(routerPath);
-        List<Hosts> hosts = handleRHList.HandleHostList(hostPath);
+//        HandleRHList handleRHList = context.getBean(HandleRHList.class);
+//        List<Routers> routers = handleRHList.HandleRouterList(routerPath);
+//        List<Hosts> hosts = handleRHList.HandleHostList(hostPath);
 
 
 
