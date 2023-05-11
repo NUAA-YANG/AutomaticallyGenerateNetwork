@@ -22,10 +22,12 @@ public class Iptables {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //id，自增
     Integer id;
+    //厂商名称
+    String manufacturer;
     //所属容器名称
     String lxdName;
     //存储的表结构，默认使用 filter 表示过滤表
-    String table;
+    String tableName;
     //插入规则，常见的使用 -I 表示在最后一条插入，-A 表示在第一条插入，-D 表示删除，-R 表示修改
     String rule;
     //存储的链结构，常见的使用 INPUT 表示进入的流量
