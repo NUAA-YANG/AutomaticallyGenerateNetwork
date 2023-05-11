@@ -26,6 +26,8 @@ public class AclToIptables {
     NetmaskUtils netmaskUtils;
     @Autowired
     IptablesService iptablesService;
+    @Autowired
+    IptablesToLine iptablesToLine;
 
 
 
@@ -154,15 +156,19 @@ public class AclToIptables {
 
 
     //处理文件夹下面的所有ACL文本
-    public void turnTxtListToIptables(String aclPathName) throws IOException {
+    public Map<String,List<Iptables>> turnToIptables(String aclPathName) throws IOException {
+        Map<String,List<Iptables>> map = new HashMap<>();
         //获取目录下的所有文件名称
         String[] fileArray = new File(aclPathName).list();
         for (String name:fileArray){
             File file = new File(aclPathName +"/"+ name);
             //用来返回类对象
             List<Iptables> iptablesList = turnTxtToIptables(file);
-            iptablesService.saveList(iptablesList);
+            //存入数据库中
+            List<Iptables> saveList = iptablesService.saveList(iptablesList);
+            map.put(name.split("\\.")[0],saveList);
         }
+        return map;
     }
 
 }

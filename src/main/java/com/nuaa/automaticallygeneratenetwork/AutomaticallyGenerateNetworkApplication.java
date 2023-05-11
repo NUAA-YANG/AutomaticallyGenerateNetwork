@@ -7,6 +7,7 @@ import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
 import com.nuaa.automaticallygeneratenetwork.pojo.Iptables;
 import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.AclToIptables;
+import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.CompleteConversion;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.*;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle.HandleRHList;
 import com.nuaa.automaticallygeneratenetwork.service.IptablesService;
@@ -32,10 +33,10 @@ public class AutomaticallyGenerateNetworkApplication {
         String hostPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml";
         String aclPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl";
 
-//        /**0.1 定义服务器的执行类*/
-//        LinuxConnection connection = context.getBean(LinuxConnection.class);
-//        Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
-//        ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
+                /**0.1 定义服务器的执行类*/
+        LinuxConnection connection = context.getBean(LinuxConnection.class);
+        Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
+        ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
 //
 //
 //        System.out.println("=========================1. 数据库写入容器信息===============================");
@@ -97,15 +98,16 @@ public class AutomaticallyGenerateNetworkApplication {
 //        List<String> cmds9 = lxdBash8.RestartFrr(routerPath);
 //        execLinuxCommands.getCmdResult(session,cmds9);
 //        cmds9.forEach(x-> System.out.println(x));
-//
-//
-//        //关闭服务器连接
-//        connection.closeJSchSession(session);
-
 
         System.out.println("=========================9. 中兴ACL-华为ACL转化为Iptables写入数据库=======================");
-        AclToIptables aclToIptables = context.getBean(AclToIptables.class);
-        aclToIptables.turnTxtListToIptables(aclPath);
+        CompleteConversion completeConversion = context.getBean(CompleteConversion.class);
+        List<String> cmds10 = completeConversion.finalConversion(aclPath);
+        execLinuxCommands.getCmdResult(session,cmds10);
+        cmds10.forEach(x-> System.out.println(x));
+
+        //关闭服务器连接
+        connection.closeJSchSession(session);
+
     }
 
 }
