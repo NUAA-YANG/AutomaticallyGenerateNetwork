@@ -21,20 +21,21 @@ public class CompleteConversion {
     AclToIptables aclToIptables;
     @Autowired
     IptablesToLine iptablesToLine;
+    @Autowired
+    CreateOrExecRule createOrExecRule;
 
     //完整转化实现
     public List<String> finalConversion(String aclPathName) throws IOException {
         List<String> cmds = new ArrayList<>();
-        //获得数据库的存储类
+        //1. 存入数据库，并且获得数据库的存储类
         Map<String, List<Iptables>> map = aclToIptables.turnToIptables(aclPathName);
-        //遍历获得的存储类，生成命令行语句
+        //2. 遍历获得的存储类，生成命令行语句
         Set<String> keySet = map.keySet();
         for (String name:keySet){
-            //根据不同的容器名称，获得不同的命令转化
+            //2.1 根据不同的容器名称，获得不同的命令转化
             List<Iptables> iptablesList = map.get(name);
-            List<String> turnToLine = iptablesToLine.turnToLine(name,iptablesList);
-            //下载iptables
-            cmds.add("lxc exec "+name+" -- apt-get install iptables -y;");
+            List<String> turnToLine = createOrExecRule.execIptablesRule(name,iptablesList);
+            //2.2 添加iptables命令行
             cmds.addAll(turnToLine);
         }
         return cmds;

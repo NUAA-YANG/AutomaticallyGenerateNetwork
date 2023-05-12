@@ -20,6 +20,7 @@ public class IptablesToLine {
 
     //将Iptables类取出转化为命令行
     public String turnIptablesToLine(Iptables iptables){
+        //StringBuffer sb = new StringBuffer();
         StringBuffer sb = new StringBuffer("iptables -t");
         //添加插入表【iptables -t filter】
         sb.append(" "+iptables.getTableName());
@@ -110,24 +111,11 @@ public class IptablesToLine {
         //添加行为规则
         if (iptables.getJudge()!=null){
             if ("permit".equals(iptables.getJudge())){
-                sb.append(" -j ACCEPT;");
+                sb.append(" -j ACCEPT");
             }else {
-                sb.append(" -j DROP;");
+                sb.append(" -j DROP");
             }
         }
         return new String(sb);
-    }
-
-
-    //将Iptables类集合转化为Iptables语句集合，返回Iptables语句集合
-    public List<String> turnToLine(String lxcName,List<Iptables> iptablesList){
-        List<String> cmds = new ArrayList<>();
-        for (int i = 0; i < iptablesList.size(); i++) {
-            Iptables iptables = iptablesList.get(i);
-            //将每个类转化为语句
-            String line = turnIptablesToLine(iptables);
-            cmds.add("lxc exec "+lxcName+" -- "+line);
-        }
-        return cmds;
     }
 }

@@ -3,20 +3,13 @@ package com.nuaa.automaticallygeneratenetwork;
 import com.jcraft.jsch.Session;
 import com.nuaa.automaticallygeneratenetwork.linuxCommand.ExecLinuxCommands;
 import com.nuaa.automaticallygeneratenetwork.linuxCommand.LinuxConnection;
-import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
-import com.nuaa.automaticallygeneratenetwork.pojo.Iptables;
-import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
-import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.AclToIptables;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.CompleteConversion;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.*;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle.HandleRHList;
-import com.nuaa.automaticallygeneratenetwork.service.IptablesService;
+import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.FileRulePush;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -104,6 +97,12 @@ public class AutomaticallyGenerateNetworkApplication {
         List<String> cmds10 = completeConversion.finalConversion(aclPath);
         execLinuxCommands.getCmdResult(session,cmds10);
         cmds10.forEach(x-> System.out.println(x));
+
+//        System.out.println("=========================10. 替换配置文件=======================");
+//        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
+//        List<String> cmds11 = fileRulePush.pushRule(aclPath);
+//        execLinuxCommands.getCmdResult(session,cmds11);
+//        cmds11.forEach(x-> System.out.println(x));
 
         //关闭服务器连接
         connection.closeJSchSession(session);

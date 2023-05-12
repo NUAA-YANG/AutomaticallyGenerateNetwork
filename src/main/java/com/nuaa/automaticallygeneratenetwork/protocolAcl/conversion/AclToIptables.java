@@ -96,8 +96,8 @@ public class AclToIptables {
         iptables.setManufacturer(manufacturer);
         iptables.setLxdName(lxdName);
         iptables.setTableName("filter");
-        iptables.setRule("I");
-        iptables.setChain("INPUT");
+        iptables.setRule("A");
+        iptables.setChain("FORWARD");
 
         iptables.setJudge(proList.get(0));
         iptables.setProtocol(proList.get(1));
