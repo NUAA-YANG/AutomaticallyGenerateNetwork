@@ -3,8 +3,12 @@ package com.nuaa.automaticallygeneratenetwork;
 import com.jcraft.jsch.Session;
 import com.nuaa.automaticallygeneratenetwork.linuxCommand.ExecLinuxCommands;
 import com.nuaa.automaticallygeneratenetwork.linuxCommand.LinuxConnection;
+import com.nuaa.automaticallygeneratenetwork.pojo.Hosts;
+import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.CompleteConversion;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.FileRulePush;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateLxd;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle.HandleRHList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -26,12 +30,12 @@ public class AutomaticallyGenerateNetworkApplication {
         String hostPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml";
         String aclPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl";
 
-                /**0.1 定义服务器的执行类*/
+        /**0.1 定义服务器的执行类*/
         LinuxConnection connection = context.getBean(LinuxConnection.class);
         Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
         ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
-//
-//
+
+
 //        System.out.println("=========================1. 数据库写入容器信息===============================");
 //        HandleRHList handleRHList = context.getBean(HandleRHList.class);
 //        List<Routers> routers = handleRHList.HandleRouterList(routerPath);
@@ -92,11 +96,15 @@ public class AutomaticallyGenerateNetworkApplication {
 //        execLinuxCommands.getCmdResult(session,cmds9);
 //        cmds9.forEach(x-> System.out.println(x));
 
+
+
         System.out.println("=========================9. 中兴ACL-华为ACL转化为Iptables写入数据库=======================");
         CompleteConversion completeConversion = context.getBean(CompleteConversion.class);
         List<String> cmds10 = completeConversion.finalConversion(aclPath);
         execLinuxCommands.getCmdResult(session,cmds10);
         cmds10.forEach(x-> System.out.println(x));
+
+
 
 //        System.out.println("=========================10. 替换配置文件=======================");
 //        FileRulePush fileRulePush = context.getBean(FileRulePush.class);

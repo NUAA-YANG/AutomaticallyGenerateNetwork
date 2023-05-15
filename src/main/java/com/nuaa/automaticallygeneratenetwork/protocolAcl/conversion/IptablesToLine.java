@@ -56,10 +56,10 @@ public class IptablesToLine {
                 // ip为数字，掩码不为空，指定网段
                 if (iptables.getDNetmask()!=null){
                     //给了指定的范围，添加源地址和子网掩码
-                    sb.append(" -s "+iptables.getDIp()+"/"+iptables.getDNetmask());
+                    sb.append(" -d "+iptables.getDIp()+"/"+iptables.getDNetmask());
                 }else {
                     // ip为数字，掩码为空，指定单个ip
-                    sb.append(" -s "+iptables.getDIp());
+                    sb.append(" -d "+iptables.getDIp());
                 }
             }else {
                 //允许所有目的ip，直接进行添加

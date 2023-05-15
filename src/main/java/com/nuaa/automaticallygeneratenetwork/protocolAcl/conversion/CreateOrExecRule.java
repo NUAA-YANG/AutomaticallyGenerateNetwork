@@ -22,6 +22,7 @@ public class CreateOrExecRule {
     IptablesToLine iptablesToLine;
 
 
+    //直接执行命令(不需要调用配置文件的替换)
     public List<String> execIptablesRule(String lxdName, List<Iptables> iptablesList){
         List<String> cmds = new ArrayList<>();
         cmds.add("lxc exec "+lxdName+" -- apt-get install iptables -y;");
@@ -32,7 +33,7 @@ public class CreateOrExecRule {
         return cmds;
     }
 
-    //将Iptables类集合转化为Iptables语句集合，生成配置文件
+    //将Iptables类集合转化为Iptables语句集合，生成配置文件(需要调用配置文件的替换)
     public List<String> createIptablesRule(String lxdName, List<Iptables> iptablesList){
         List<String> cmds = new ArrayList<>();
         cmds.add("lxc exec "+lxdName+" -- apt-get install iptables -y;");
