@@ -34,20 +34,33 @@ public class CreateOrExecRule {
     }
 
     //将Iptables类集合转化为Iptables语句集合，生成配置文件(需要调用配置文件的替换)
-    public List<String> createIptablesRule(String lxdName, List<Iptables> iptablesList){
-        List<String> cmds = new ArrayList<>();
-        cmds.add("lxc exec "+lxdName+" -- apt-get install iptables -y;");
-        cmds.add("echo \"" +
-                "*filter\n" +
+    public String createIptablesRule(List<Iptables> iptablesList){
+        StringBuffer rule = new StringBuffer();
+        rule.append("*filter\n" +
                 ":INPUT ACCEPT [0:0]\n" +
                 ":FORWARD ACCEPT [0:0]\n" +
-                ":OUTPUT ACCEPT [0:0]");
+                ":OUTPUT ACCEPT [0:0]\n");
         for (int i = 0; i < iptablesList.size(); i++) {
             //将每个类转化为语句
             String line = iptablesToLine.turnIptablesToLine(iptablesList.get(i));
-            cmds.add(line.trim());
+            rule.append(line.trim()+"\n");
         }
-        cmds.add("COMMIT\n\" > /root/AutoNetwork/"+lxdName+"/iptables.rules ");
-        return cmds;
+        rule.append("COMMIT\n");
+        return new String(rule);
+    }
+
+    //创建自启动脚本文件
+    public String createBash(){
+        String resultBash = "#!/bin/bash\n"+
+                "chmod 777 /lib/systemd/system/rc-local.service\n"+
+                "systemctl enable /lib/systemd/system/rc-local.service\n";
+        return resultBash;
+    }
+
+    public String createRcLocal(){
+        String RcLocal = "#!/bin/sh\n" +
+                "iptables-restore < /etc/iptables.rules\n" +
+                "exit 0";
+        return RcLocal;
     }
 }

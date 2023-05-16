@@ -20,10 +20,10 @@ public class IptablesToLine {
 
     //将Iptables类取出转化为命令行
     public String turnIptablesToLine(Iptables iptables){
-        //StringBuffer sb = new StringBuffer();
-        StringBuffer sb = new StringBuffer("iptables -t");
+        StringBuffer sb = new StringBuffer();
+        //StringBuffer sb = new StringBuffer("iptables -t");
         //添加插入表【iptables -t filter】
-        sb.append(" "+iptables.getTableName());
+        //sb.append(" "+iptables.getTableName());
         //添加插入规则【iptables -t filter -I INPUT】
         sb.append(" -"+iptables.getRule()+" "+iptables.getChain());
 
