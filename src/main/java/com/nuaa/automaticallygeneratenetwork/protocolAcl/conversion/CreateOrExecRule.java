@@ -49,14 +49,16 @@ public class CreateOrExecRule {
         return new String(rule);
     }
 
-    //创建自启动脚本文件
+    //创建自启动脚本文件同时设置防火墙读取文件信息
     public String createBash(){
         String resultBash = "#!/bin/bash\n"+
                 "chmod 777 /lib/systemd/system/rc-local.service\n"+
-                "systemctl enable /lib/systemd/system/rc-local.service\n";
+                "systemctl enable /lib/systemd/system/rc-local.service\n"+
+                "iptables-restore < /etc/iptables.rules;";
         return resultBash;
     }
 
+    //保证每次重启都会读取防火墙配置文件
     public String createRcLocal(){
         String RcLocal = "#!/bin/sh\n" +
                 "iptables-restore < /etc/iptables.rules\n" +
