@@ -26,6 +26,10 @@ public class NetmaskUtils {
         return String.valueOf((32-result));
     }
 
+
+
+
+
     //计算字符串中有多少个连续的1（用来判断子网掩码）
     public int calculateOne(String str){
         int one = 0 ;

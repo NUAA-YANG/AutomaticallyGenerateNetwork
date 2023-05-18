@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 public class InterfaceFtl {
     String name;
     String ipAddress;
-    String subnetMask;
+    Integer subnetMask;
 }

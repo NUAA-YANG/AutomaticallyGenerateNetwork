@@ -1,0 +1,490 @@
+show running-config
+!<mim>
+!configuration saved at 05:08:47 Thu Dec 8 2022 by write zdb
+!configuration saved at 05:08:47 Thu Dec 8 2022 by write txt
+!last configuration change at 08:07:03 Wed Dec 7 2022 by ipnmuser
+!</mim>
+!<system-config>
+hostname QR2
+login authentication
+load-mode zdb
+nvram boot-server 192.168.0.1
+nvram default-gateway 192.168.0.1
+nvram boot-username 15k
+nvram ftp-path /
+!</system-config>
+!<system-management>
+service 0/2/0 ipflow enhance enable
+service 0/3/0 ipflow enhance enable
+service 0/4/0 ipflow enhance enable
+service 0/5/0 ipflow enhance enable
+!</system-management>
+!<if-intf>
+interface gei-0/1/0/1
+  description abc-LAN-1G
+   ip address 10.100.20.254 255.255.255.0
+  no shutdown
+$
+interface gei-0/1/0/2
+  description abcd-MP7300-G1/0/1-1G
+  ip address 10.100.24.33 255.255.255.240
+  no shutdown
+$
+interface gei-0/1/0/3
+$
+interface gei-0/2/0/3
+$
+interface gei-0/2/0/4
+$
+interface gei-0/2/0/5
+$
+interface gei-0/2/1/1
+  description aabbc-ReiJei-G1/0/15
+  ip address 10.100.25.1 255.255.255.240
+  no shutdown
+$
+interface eth1
+  ip address 192.168.81.2 255.255.0.0
+$
+interface eth2
+  ip address 192.168.82.1 255.255.255.255
+$
+interface eth3
+  ip address 192.168.83.1 255.255.255.255
+$
+interface null1
+$
+interface qx1
+$
+!</if-intf>
+ !<port-physical-config>
+interface gei-0/2/0/1
+  holdtime 100
+$
+interface gei-0/2/1/1
+  holdtime 100
+$
+!</port-physical-config>
+!<clock-mgr>
+clock timezone BeiJing 8
+!</clock-mgr>
+!<switchvlan>
+switchvlan-configuration
+  vlan 1
+  $
+  vlan 100
+  $
+$
+!</switchvlan>
+!<ipv4-acl>
+ipv4-access-list gg-ACL
+$
+ipv4-access-list sl-ACL
+ $
+ipv4-access-list bb-ACL
+$
+ipv4-access-list nn-ACL
+$
+ipv4-access-list gg-vpn-ACL
+$
+ipv4-access-list sl-vpn-ACL
+$
+ipv4-access-list bb-vpn-ACL
+$
+ipv4-access-list mm-vpn-ACL
+$
+ipv4-access-list nn-vpn-ACL
+$
+ipv4-access-list vty
+  rule 10 permit ip 12.10.8.0 0.0.0.255 any
+  rule 15 permit ip 10.56.4.0 0.0.0.255 any
+  rule 20 permit ip 10.56.20.0 0.0.0.255 any
+  rule 25 permit ip 12.200.39.194 0.0.0.0 any
+  rule 30 permit ip 10.180.4.0 0.0.0.255 any
+  rule 35 permit ip 12.10.18.0 0.0.0.255 any
+  rule 40 permit ip 10.100.20.0 0.0.3.255 any
+   rule 45 permit ip 12.200.39.196 0.0.0.0 any
+  rule 50 permit 10.100.2.48 0.0.0.15
+  rule 200 deny ip any any
+$
+ipv4-access-list snmp
+  rule 10 permit 12.10.8.200 0.0.0.0
+  rule 20 permit 12.10.8.2 0.0.0.0
+  rule 30 permit 12.200.39.194 0.0.0.0
+  rule 200 deny any
+$
+!</ipv4-acl>
+!<route-map>
+route-map BJGK-POLICY permit 10
+   match ip address BJGK
+$
+route-map rmOSPFToRIB permit 10
+  match ip address prefix-list PLOSPF_WHGH
+$
+route-map rmUser_WHGH permit 10
+  set community 54:1071
+$
+!</route-map>
+!<adm-mgr>
+system-user
+  account-switch on accounting-template 2020
+  authorization-template 1
+    access-only lct qx dcn
+    bind aaa-authorization-template 2001
+    local-privilege-level 15
+  $
+  authorization-template 10
+    access-only lct qx dcn
+    bind aaa-authorization-template 2020
+  $
+  authorization-template 128
+    access-only lct qx dcn
+     bind aaa-authorization-template 2002
+    local-privilege-level 15
+  $
+  authentication-template 1
+    bind aaa-authentication-template 2001
+  $
+  authentication-template 10
+    bind aaa-authentication-template 2020
+  $
+  authentication-template 128
+    bind aaa-authentication-template 2002
+  $
+  user-default
+    bind authentication-template 10
+    bind authorization-template 10
+  $
+  user-name ipnmuser
+    bind authentication-template 128
+    bind authorization-template 128
+    password encrypted aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  $
+$
+ !</adm-mgr>
+!<ipflow>
+flow exporter ipnm-flow
+  destination ipv4-address 12.10.8.8
+  source ipv4-address 10.100.16.1
+  transport udp 9000
+$
+flow record ipnm-flow
+  match flow direction
+  match flow sample-rate
+  match interface input
+  match interface output
+  match mpls label stack section 1
+  match mpls label stack section 2
+  match mpls label stack section 3
+  match ip protocol
+  match ip cos
+  match ipv4 destination address
+  match ipv4 destination address-mask
+  match ipv4 source address
+  match ipv4 source address-mask
+  match routing bgp as-number source
+  match routing bgp as-number destination
+   match routing bgp as-number next-adjacent
+  match routing bgp as-number prev-adjacent
+  match routing next-hop-address ipv4
+  match transport source-port
+  match transport destination-port
+  collect counter bytes
+  collect counter packets
+  collect timestamp sys-uptime first
+  collect timestamp sys-uptime last
+$
+flow monitor ipnm-flow
+  cache entries 131072
+  cache timeout active 120
+  cache timeout inactive 15
+  record ipnm-flow
+  exporter ipnm-flow
+$
+sampler ipnm-sampler
+  mode deterministic 1-out-of 128
+$
+!</ipflow>
+!<ntp>
+ntp enable
+ntp server 10.144.0.1 priority 1
+ntp source interface loopback1
+!</ntp>
+!<port-acl>
+interface gei-0/1/0/1
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+interface gei-0/1/0/2
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+interface gei-0/1/0/4
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+interface gei-0/1/0/6
+  ipv4-access-group egress 110
+   ipv4-access-group ingress 110
+$
+interface gei-0/1/0/7
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+interface gei-0/2/0/1
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+interface gei-0/2/1/1
+  ipv4-access-group egress 110
+  ipv4-access-group ingress 110
+$
+!</port-acl>
+!<ptp>
+ptp
+  fixed-mode
+  $
+   free-mode
+  $
+$
+!</ptp>
+!<qppb>
+interface gei-0/2/0/1
+  qos-policy destination qos-id
+$
+!</qppb>
+!<tacplus>
+tacacs enable
+tacacs-client 10.100.16.1
+tacacs-server host 12.200.39.195 key encrypted abcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcd
+tacacs-server host 12.10.8.6 key encrypted abcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcdabcabcabcabcd
+tacplus group-server ipnm-aaa
+  server 12.10.8.6 master
+  server 12.200.39.195
+$
+!</tacplus>
+!<lldp>
+lldp
+  lldp-rx disable
+  lldp-tx disable
+$
+!</lldp>
+!<ip>
+ip source-route disable
+!</ip>
+!<ssh>
+ssh server access-class ipv4 vty
+ssh server enable
+!</ssh>
+!<ldp>
+mpls ldp instance 1
+  access-fec ip-prefix host-route-only
+  holdtime 30
+  interface gei-0/2/0/1
+  $
+  neighbor 10.100.0.1 password sealed abcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdefabcdeabcdef
+  router-id loopback1
+$
+!</ldp>
+!<alarm>
+logging console warnings
+logging file mypolicy
+  accept off
+  files number 7 per-size 5120
+$
+logging file default almlog
+  accept on
+  files number 7 per-size 5120
+  level informational
+$
+logging file default cmdlog
+  buffer 1000
+  files number 7 per-size 5120
+$
+logging file default srvlog
+  accept on
+  files number 7 per-size 5120
+  interval 10
+ $
+logging trap-enable notifications
+logging snmp
+  accept on
+  match cmdlog
+$
+syslog level informational
+syslog-server facility local5
+syslog-server host 12.10.8.200 alarmlog cmdlog debugmsg servicelog braslog natlo
+g
+syslog-server host 12.10.8.4 lport 1029 alarmlog cmdlog debugmsg servicelog bras
+log natlog
+syslog-server host 12.200.39.196 lport 1028 alarmlog cmdlog debugmsg servicelog 
+braslog natlog
+syslog-server source ipv4 10.100.16.1
+!</alarm>
+!<ftp>
+ftp-server enable
+!</ftp>
+!<telnet>
+line telnet idle-timeout 5
+line telnet access-class ipv4 vty
+line telnet max-link 5
+!</telnet>
+!<monitor>
+monitor session 1
+  default destination interface gei-0/1/0/8
+$
+monitor apply session 1 source interface gei-0/2/0/1 direction rx
+monitor apply session 1 source interface gei-0/2/0/1 direction tx
+!</monitor>
+!<hqos>
+$
+policy-map pm-output
+  class cm-ipp6_7
+    priority-level 3
+  $
+  class cm-gg-output
+    bandwidth percent 50
+    random-detect enable
+    random-detect precedence 4 10 80 100
+  $
+  class cm-ss-output
+    bandwidth percent 10
+    random-detect enable
+     random-detect precedence 2 10 70 100
+  $
+  class cm-bb-output
+    bandwidth percent 10
+    random-detect enable
+    random-detect precedence 1 10 65 100
+  $
+  class cm-nn-output
+    bandwidth percent 10
+    random-detect enable
+    random-detect precedence 0 10 60 100
+  $
+$
+policy-map pm-input
+  class cm-gg
+    set mpls-exp 4
+    set dscp 32
+  $
+  class cm-ss
+    set mpls-exp 2
+    set dscp 16
+  $
+  class cm-bb
+     set mpls-exp 1
+    set dscp 8
+  $
+  class cm-nn
+    set mpls-exp 0
+    set dscp 0
+  $
+$
+policy-map pm-gg-vpn
+  class cm-gg-vpn
+    bandwidth percent 50
+    random-detect enable
+    random-detect precedence 4 5 90 100
+  $
+$
+policy-map pm-ss-vpn
+  class cm-ss-vpn
+    bandwidth percent 10
+    random-detect enable
+    random-detect precedence 2 10 80 100
+  $
+$
+policy-map pm-bb-vpn
+   class cm-bb-vpn
+    bandwidth percent 10
+    random-detect enable
+    random-detect precedence 1 20 70 100
+  $
+$
+!<bfd>
+bfd
+  interface gei-0/2/0/1
+     time-negotiation interval 10 min-rx 10 multiplier 3
+  $
+$
+!</bfd>
+!<bgp>
+router bgp 100
+  bgp always-compare-med
+  timers bgp 10 30
+  bgp graceful-restart
+  distance bgp internal 100
+  distance bgp external 10
+  synchronization disable
+  maximum-paths ibgp 4
+  bgp router-id 10.100.16.1
+  bgp dampening 15 750 6000 60
+  network 192.168.81.0 255.255.255.0 route-map rmUser_WHGH
+  network 192.168.82.0 255.255.255.0 route-map rmUser_WHGH
+  network 192.168.83.0 255.255.255.0 route-map rmUser_WHGH
+  neighbor pgDQToRR2 peer-group
+  neighbor pgDQToRR2 remote-as 54
+  neighbor pgDQToRR2 activate
+  neighbor pgDQToRR2 description QiaoKouDQ-To-RR2
+  neighbor 192.168.81.1 last-hop-self
+  neighbor 192.168.82.2 next-hop-self
+  neighbor 192.168.83.2 next-hop-self
+  neighbor pgDQToRR2 send-community
+  neighbor pgDQToRR2 update-source loopback1
+  neighbor pgDQToRR2 maximum-prefix 100000 80 warning-only
+  neighbor pgDQToRR2 additional-paths receive
+  neighbor 12.200.0.52 peer-group pgDQToRR2
+  neighbor 12.200.0.52 description WuHanDQ-TO-BaLlYaoRR2
+  neighbor 10.220.0.52 peer-group pgDQToRR2
+  neighbor 10.220.0.52 description WuHanDQ-TO-ChengDuRR2
+  address-family ipv4 mdt
+  $
+  address-family ipv4 multicast
+  $
+  address-family l2vpn vpls
+  $
+  address-family vpnv4
+  $
+  address-family vpnv4 mcast
+  $
+  address-family vpnv4 multicast
+  $
+  address-family ipv6
+    synchronization disable
+  $
+  address-family ipv6 multicast
+  $
+  address-family vpnv6
+  $
+  address-family vpnv6 mcast
+   $
+  address-family vpnv6 multicast
+  $
+  address-family route-target
+  $
+$
+!</bgp>
+!<ospfv2>
+router ospf 100
+  area 0.0.0.0 authentication message-digest
+  distance ospf internal 30 ext1 30 ext2 30
+  distribute-list route-map rmOSPFToRIB in
+  interface gei-0/1/0/6
+     authentication
+    authentication-key encrypted aaaaaaaaaaaaaaaaaaaaaaaa
+  $
+  interface gei-0/1/0/7
+    authentication
+    authentication-key encrypted aaaaaaaaaaaaaaaaaaaaaaaa
+  $
+  interface gei-0/2/1/1
+    authentication
+    authentication-key encrypted aaaaaaaaaaaaaaaaaaaaaaaa
+  $
+  network 192.168.81.0 255.255.255.0 area 0.0.0.0
+  notify default route always metric 1
+  router-id 10.100.16.1
+$
+!</ospfv2>
+aaaaaa_M6000-8S

@@ -33,8 +33,8 @@ public class FtlXml {
         dataMap.put("lxd_name","QR2");
 
         List<InterfaceFtl> interfaceFtlList = new ArrayList<>();
-        interfaceFtlList.add(new InterfaceFtl("eth1","192.168.1.1","24"));
-        interfaceFtlList.add(new InterfaceFtl("eth2","192.168.2.1","24"));
+        interfaceFtlList.add(new InterfaceFtl("eth1","192.168.1.1",24));
+        interfaceFtlList.add(new InterfaceFtl("eth2","192.168.2.1",24));
         dataMap.put("interfaceFtlList",interfaceFtlList);
 
         List<String> ospfIp = new ArrayList<>();
@@ -66,8 +66,9 @@ public class FtlXml {
         FtlXml ftlXml = new FtlXml();
         ftlXml.ftlToXml(dataMap,"Router","QR2","src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/ftlExample");
 
-
     }
+
+
 
     /**
      * @description  将传入的Map键值对转化为xml文件
@@ -82,13 +83,14 @@ public class FtlXml {
         configuration.setDirectoryForTemplateLoading(new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/ftlExample"));
         configuration.setDefaultEncoding("utf-8");
         Template template = null;
-        //.ftl配置文件所在路径
+        //选择相关ftl配置文件
         if ("Router".equals(type)){
+            //父级目录下ftl模板的名称
             template = configuration.getTemplate("RouterExample.ftl", "utf-8");
         }else {
             template = configuration.getTemplate("HostExample.ftl", "utf-8");
         }
-        //创建一个位置用于存放生成的文件
+        //创建一个位置用于存放生成的文件，指定生成xml文件
         Writer writer = new FileWriter(new File(savePath+"/"+lxdName+".xml"));
         template.process(dataMap,writer);
     }
