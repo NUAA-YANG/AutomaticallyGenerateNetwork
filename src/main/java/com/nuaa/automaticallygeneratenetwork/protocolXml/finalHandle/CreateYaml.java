@@ -35,41 +35,6 @@ public class CreateYaml {
     @Autowired
     CreateBridge createBridge;
 
-    /**
-     * @description  根据传入拼接的接口id在本地创建网络接口配置文件
-     * @date 2023/5/4 14:59
-     * @params [interfacesId：拼接的接口id, lxdName：容器名称]
-     * @returns void
-     */
-//    public void touchInterYaml(String interfacesId,String lxdName) throws IOException {
-//        //创建输出流
-//        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/java/com/nuaa/automaticallygeneratenetwork/io/netInterfaces/"+lxdName+"_10-lxc.yaml")));
-//        String[] splitId = interfacesId.split(";");
-//        //先写入固定的头文件
-//        writer.write("network:\n" +
-//                "  version: 2\n" +
-//                "  ethernets:\n" +
-//                "    eth0:\n" +
-//                "      dhcp4: true\n" +
-//                "      dhcp-identifier: mac\n");
-//        writer.flush();
-//        //开始写入接口描述
-//        for (int i = 0 ; i<splitId.length;i++){
-//            //获取每个接口信息
-//            NetInterfaces netInterface = interfacesService.getById(Integer.parseInt(splitId[i]));
-//            writer.write("    "+netInterface.getName()+":\n" +
-//                    "      dhcp4: false\n" +
-//                    "      dhcp-identifier: ["+netInterface.getIpAddress()+"/"+netInterface.getSubnetMask()+"]");
-//            //如果不是最后一个接口信息，就输入换行
-//            if (i!=(splitId.length-1)){
-//                writer.write("\n");
-//            }
-//            writer.flush();
-//        }
-//        //防止未写入
-//        writer.flush();
-//        writer.close();
-//    }
 
     /**
      * @description 根据传入的容器信息创建网络接口配置文件
@@ -109,7 +74,8 @@ public class CreateYaml {
             if (lxd instanceof Hosts){
                 stringBuffer.append("\n");
                 //为主机找到网关
-                NetInterfaces gateway4Inter = createBridge.matchIp(netInterface.getIpAddress(), netInterface.getSubnetMask(), interfacesService.getList());
+                NetInterfaces gateway4Inter = createBridge.
+                        matchIp(netInterface.getIpAddress(), netInterface.getSubnetMask(), interfacesService.getList());
                 stringBuffer.append("      gateway4: "+gateway4Inter.getIpAddress());
 
             }

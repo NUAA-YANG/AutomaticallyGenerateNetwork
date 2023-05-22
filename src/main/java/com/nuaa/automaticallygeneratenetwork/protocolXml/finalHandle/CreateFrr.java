@@ -55,7 +55,7 @@ public class CreateFrr {
             String[] externalIp = bgp.getExternal()!=null?bgp.getExternal().split(";"):null;
             String[] internalIp = bgp.getInternal()!=null?bgp.getInternal().split(";"):null;
             String[] bgpNetworkIp = bgp.getNetwork()!=null?bgp.getNetwork().split(";"):null;
-            //1.1 开始遍历出入口流量
+            //1.1 开始遍历出口流量
             if (bgp.getAns()!=null){
                 stringBuffer.append("router bgp "+bgp.getAns()+"\n");
             }
@@ -67,6 +67,7 @@ public class CreateFrr {
                     }
                 }
             }
+            //遍历入口流量
             if (internalIp!=null){
                 for (String iI:internalIp){
                     if (!iI.equals("")){

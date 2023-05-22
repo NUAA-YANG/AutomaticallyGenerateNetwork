@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 @Component
 public class TextMatch {
 
-//    @Autowired
-//    NetmaskUtils netmaskUtils;
+    @Autowired
+    NetmaskUtils netmaskUtils;
 
     public static void main(String[] args) throws IOException {
         File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText/QR1_Router_HuaWei.txt");
@@ -40,7 +40,6 @@ public class TextMatch {
     //正则匹配，将不同厂商的网关信息转化为Map键值对
     public Map<String, Object> MatchFtl(File file) throws IOException {
 
-        NetmaskUtils netmaskUtils = new NetmaskUtils();
 
         //存储最后的结果
         Map<String, Object> dataMap = new HashMap<>();
