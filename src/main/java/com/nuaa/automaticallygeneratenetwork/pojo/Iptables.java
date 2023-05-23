@@ -48,9 +48,9 @@ public class Iptables {
     String sStartPort;
     //源端口截止端口
     String sDestPort;
-    //目的端口关键字
+    //源端口关键字
     String sEq;
-    //目的端口号
+    //源端口号
     String sPort;
     /**目的属性：其中range和eq只能出现其中一个*/
     //目的IP地址【举例：单个ip为 10.250.143.31，网段为 10.250.143.31/28】

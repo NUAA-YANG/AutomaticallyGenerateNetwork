@@ -26,7 +26,7 @@ public class TextMatch {
     NetmaskUtils netmaskUtils;
 
     public static void main(String[] args) throws IOException {
-        File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText/QR1_Router_HuaWei.txt");
+        File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText/QRTest1_Router_HuaWei.txt");
         TextMatch textMatch = new TextMatch();
         Map<String, Object> map = textMatch.MatchFtl(file);
         Set<String> keySet = map.keySet();

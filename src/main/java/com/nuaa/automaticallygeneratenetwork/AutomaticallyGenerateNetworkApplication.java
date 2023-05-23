@@ -9,6 +9,7 @@ import com.nuaa.automaticallygeneratenetwork.pojo.Routers;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.AclToIptables;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.CompleteConversion;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.FileRulePush;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.createXML.ftlReplace.CreateXml;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateLxd;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle.HandleRHList;
 import org.springframework.boot.SpringApplication;
@@ -32,11 +33,17 @@ public class AutomaticallyGenerateNetworkApplication {
         String routerPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/routerXml";
         String hostPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/xml/hostXml";
         String aclPath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl";
+        String manufacturePath = "src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText";
 
         /**0.1 定义服务器的执行类*/
         LinuxConnection connection = context.getBean(LinuxConnection.class);
         Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
         ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
+
+
+        System.out.println("=========================0. 网管信息生成XML文件===============================");
+        CreateXml createXml = context.getBean(CreateXml.class);
+        createXml.createRouterHostXml(manufacturePath,routerPath,hostPath);
 
 
 //        System.out.println("=========================1. 数据库写入容器信息===============================");
@@ -113,11 +120,11 @@ public class AutomaticallyGenerateNetworkApplication {
 //        cmds10.forEach(x-> System.out.println(x));
 
 
-        System.out.println("===========================11. 替换防火墙配置文件============================");
-        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
-        List<String> cmds11 = fileRulePush.pushRule(aclPath);
-        execLinuxCommands.getCmdResult(session,cmds11);
-        cmds11.forEach(x-> System.out.println(x));
+//        System.out.println("===========================11. 替换防火墙配置文件============================");
+//        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
+//        List<String> cmds11 = fileRulePush.pushRule(aclPath);
+//        execLinuxCommands.getCmdResult(session,cmds11);
+//        cmds11.forEach(x-> System.out.println(x));
 
 
         //关闭服务器连接

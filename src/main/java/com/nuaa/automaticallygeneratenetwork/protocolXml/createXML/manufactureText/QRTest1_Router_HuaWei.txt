@@ -1,7 +1,7 @@
 display current-configuration
 !Software Version V800R012C10SPC300
 #
-sysname QR1
+sysname QRTest1
 #
 set neid 80e38f
 #
