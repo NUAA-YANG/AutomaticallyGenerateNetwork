@@ -10,7 +10,7 @@ import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.AclToIptable
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.CompleteConversion;
 import com.nuaa.automaticallygeneratenetwork.protocolAcl.conversion.FileRulePush;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.createXML.ftlReplace.CreateXml;
-import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.CreateLxd;
+import com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle.*;
 import com.nuaa.automaticallygeneratenetwork.protocolXml.preHandle.HandleRHList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,13 +39,13 @@ public class AutomaticallyGenerateNetworkApplication {
         LinuxConnection connection = context.getBean(LinuxConnection.class);
         Session session = connection.getJSchSession("192.168.31.104", 22, "root", "root");
         ExecLinuxCommands execLinuxCommands = context.getBean(ExecLinuxCommands.class);
-
-
-        System.out.println("=========================0. 网管信息生成XML文件===============================");
-        CreateXml createXml = context.getBean(CreateXml.class);
-        createXml.createRouterHostXml(manufacturePath,routerPath,hostPath);
-
-
+//
+//
+//        System.out.println("=========================0. 网管信息生成XML文件===============================");
+//        CreateXml createXml = context.getBean(CreateXml.class);
+//        createXml.createRouterHostXml(manufacturePath,routerPath,hostPath);
+//
+//
 //        System.out.println("=========================1. 数据库写入容器信息===============================");
 //        HandleRHList handleRHList = context.getBean(HandleRHList.class);
 //        List<Routers> routers = handleRHList.HandleRouterList(routerPath);
@@ -108,9 +108,9 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
 
-//        System.out.println("=========================9. ACL转化为Iptables写入数据库====================");
-//        AclToIptables aclToIptables = context.getBean(AclToIptables.class);
-//        aclToIptables.turnToIptables(aclPath);
+        System.out.println("=========================9. ACL转化为Iptables写入数据库====================");
+        AclToIptables aclToIptables = context.getBean(AclToIptables.class);
+        aclToIptables.turnToIptables(aclPath);
 
 
 //        System.out.println("=========================10. 生成防火墙相关配置文件及脚本====================");
@@ -118,8 +118,8 @@ public class AutomaticallyGenerateNetworkApplication {
 //        List<String> cmds10 = completeConversion.finalConversion(aclPath);
 //        execLinuxCommands.getCmdResult(session,cmds10);
 //        cmds10.forEach(x-> System.out.println(x));
-
-
+//
+//
 //        System.out.println("===========================11. 替换防火墙配置文件============================");
 //        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
 //        List<String> cmds11 = fileRulePush.pushRule(aclPath);

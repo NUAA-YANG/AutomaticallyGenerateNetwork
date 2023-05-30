@@ -77,17 +77,19 @@ public class AclToIptables {
             pattern = Pattern.compile(ZhongXing_Regex);
         }
         Matcher matcher = pattern.matcher(line);
-        matcher.find();
         //用于记录属性
         List<String> proList = new ArrayList<>();
-        //将属性封装到集合当中
-        for (int i = 1 ; i<17 ; i++){
-            if (matcher.group(i)!=null){
-                proList.add(matcher.group(i));
-            }else {
-                proList.add(null);
+        if (matcher.find()){
+            //将属性封装到集合当中
+            for (int i = 1 ; i<17 ; i++){
+                if (matcher.group(i)!=null){
+                    proList.add(matcher.group(i));
+                }else {
+                    proList.add(null);
+                }
             }
         }
+
 
         Iptables iptables = new Iptables();
 
@@ -99,30 +101,32 @@ public class AclToIptables {
         iptables.setRule("A");
         iptables.setChain("FORWARD");
 
-        iptables.setJudge(proList.get(0));
-        iptables.setProtocol(proList.get(1));
+        if (proList.size()>0){
+            iptables.setJudge(proList.get(0));
+            iptables.setProtocol(proList.get(1));
 
-        iptables.setSIp(proList.get(2));
-        if (proList.get(3)!=null){
-            //将二进制的子网掩码转化为数字
-            iptables.setSNetmask(netmaskUtils.netmaskToNum(proList.get(3)));
-        }
-        iptables.setSRange(proList.get(4));
-        iptables.setSStartPort(proList.get(5));
-        iptables.setSDestPort(proList.get(6));
-        iptables.setSEq(proList.get(7));
-        iptables.setSPort(proList.get(8));
+            iptables.setSIp(proList.get(2));
+            if (proList.get(3)!=null){
+                //将二进制的子网掩码转化为数字
+                iptables.setSNetmask(netmaskUtils.netmaskToNum(proList.get(3)));
+            }
+            iptables.setSRange(proList.get(4));
+            iptables.setSStartPort(proList.get(5));
+            iptables.setSDestPort(proList.get(6));
+            iptables.setSEq(proList.get(7));
+            iptables.setSPort(proList.get(8));
 
-        iptables.setDIp(proList.get(9));
-        if (proList.get(10)!=null){
-            //将二进制的子网掩码转化为数字
-            iptables.setDNetmask(netmaskUtils.netmaskToNum(proList.get(10)));
+            iptables.setDIp(proList.get(9));
+            if (proList.get(10)!=null){
+                //将二进制的子网掩码转化为数字
+                iptables.setDNetmask(netmaskUtils.netmaskToNum(proList.get(10)));
+            }
+            iptables.setDRange(proList.get(11));
+            iptables.setDStartPort(proList.get(12));
+            iptables.setDDestPort(proList.get(13));
+            iptables.setDEq(proList.get(14));
+            iptables.setDPort(proList.get(15));
         }
-        iptables.setDRange(proList.get(11));
-        iptables.setDStartPort(proList.get(12));
-        iptables.setDDestPort(proList.get(13));
-        iptables.setDEq(proList.get(14));
-        iptables.setDPort(proList.get(15));
 
         return iptables;
     }
@@ -133,21 +137,14 @@ public class AclToIptables {
         //用来返回结果
         List<Iptables> iptablesList = new ArrayList<>();
         //获得容器名称
-        String lxdName = file.getName().split("\\.")[0];
+        String[] splitInfo = file.getName().split("_");
+        String lxdName = splitInfo[0];
+        //获得厂商名称
+        String manufacturer = splitInfo[1].split("\\.")[0];
         //创建读取流
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        //默认厂商为中兴
-        String manufacturer = "ZhongXing";
         String line = null;
         while ((line=reader.readLine())!=null){
-            //匹配厂商
-            if (line.contains("ZhongXing")){
-                manufacturer = "ZhongXing";
-                continue;
-            }else if (line.contains("HuaWei")){
-                manufacturer = "HuaWei";
-                continue;
-            }
             Iptables iptables = turnLineToIptables(line, lxdName, manufacturer);
             iptablesList.add(iptables);
         }
@@ -166,7 +163,8 @@ public class AclToIptables {
             List<Iptables> iptablesList = turnTxtToIptables(file);
             //存入数据库中
             List<Iptables> saveList = iptablesService.saveList(iptablesList);
-            map.put(name.split("\\.")[0],saveList);
+            //根据容器名称进行存储
+            map.put(name.split("_")[0],saveList);
         }
         return map;
     }

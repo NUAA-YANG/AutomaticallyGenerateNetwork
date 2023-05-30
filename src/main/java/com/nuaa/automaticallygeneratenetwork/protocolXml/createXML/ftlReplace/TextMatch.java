@@ -26,7 +26,7 @@ public class TextMatch {
     NetmaskUtils netmaskUtils;
 
     public static void main(String[] args) throws IOException {
-        File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText/QRTest1_Router_HuaWei.txt");
+        File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolXml/createXML/manufactureText/QR1_Router_HuaWei.txt");
         TextMatch textMatch = new TextMatch();
         Map<String, Object> map = textMatch.MatchFtl(file);
         Set<String> keySet = map.keySet();
@@ -159,19 +159,30 @@ public class TextMatch {
                     ospfIp.add(ip);
                 }
             }
-
         }
 
         dataMap.put("lxd_name",lxdName);
         dataMap.put("type",type);
         dataMap.put("interfaceFtlList",interfaceFtlList);
-        dataMap.put("ospfIp",ospfIp);
-        dataMap.put("ospfRedis","bgp");
-        dataMap.put("bgpAns",bgpAns);
-        dataMap.put("bgpInterIp",bgpInterIp);
-        dataMap.put("bgpExterIp",bgpExterIp);
-        dataMap.put("bgpIp",bgpIp);
-        dataMap.put("bgpRedis","ospf");
+        //还需要判断是否存在ospf协议
+        if (ospfIp.size()<=0){
+            dataMap.put("ospfFlag","no");
+        }else {
+            dataMap.put("ospfFlag","yes");
+            dataMap.put("ospfIp",ospfIp);
+            dataMap.put("ospfRedis","bgp");
+        }
+        //还需要判断是否存在bgp协议
+        if (bgpInterIp.size()<=0 && bgpExterIp.size()<=0 && bgpIp.size()<=0){
+            dataMap.put("bgpFlag","no");
+        }else {
+            dataMap.put("bgpFlag","yes");
+            dataMap.put("bgpAns",bgpAns);
+            dataMap.put("bgpInterIp",bgpInterIp);
+            dataMap.put("bgpExterIp",bgpExterIp);
+            dataMap.put("bgpIp",bgpIp);
+            dataMap.put("bgpRedis","ospf");
+        }
 
         return dataMap;
     }

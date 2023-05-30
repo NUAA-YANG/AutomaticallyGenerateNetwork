@@ -13,9 +13,10 @@
     </interfaces>
     </#if>
     <protocol><!--描述协议信息-->
+        <#if ospfFlag == "yes">
         <ospf>
             <#--需要判断是否非空-->
-            <#if ospfIp??>
+            <#if ospfIp?? && (ospfIp?size>0)>
             <ospf_network><!--ospf的邻接点-->
                 <#list ospfIp as oIp>
                 <ip>${oIp}</ip>
@@ -26,25 +27,27 @@
             <ospf_redistribute>${ospfRedis}</ospf_redistribute><!--重转发网络协议-->
             </#if>
         </ospf>
+        </#if>
+        <#if bgpFlag == "yes">
         <bgp>
             <#if bgpAns??>
             <ans>${bgpAns}</ans><!--bgp自治域-->
             </#if>
-            <#if bgpInterIp??>
+            <#if bgpInterIp?? && (bgpInterIp?size>0)>
             <internal><!--bgp的入口流量-->
                 <#list bgpInterIp as interIp>
                 <ip>${interIp}</ip>
                 </#list>
             </internal>
             </#if>
-            <#if bgpExterIp??>
+            <#if bgpExterIp?? && (bgpExterIp?size>0)>
             <external><!--bgp的出口流量-->
                 <#list bgpExterIp as exterIp>
                 <ip>${exterIp}</ip>
                 </#list>
             </external>
             </#if>
-            <#if bgpIp??>
+            <#if bgpIp?? && (bgpIp?size>0)>
             <bgp_network><!--bgp的邻接点-->
                 <#list bgpIp as bIp>
                 <ip>${bIp}</ip>
@@ -55,5 +58,6 @@
             <bgp_redistribute>${bgpRedis}</bgp_redistribute><!--重转发网络协议-->
             </#if>
         </bgp>
+        </#if>
     </protocol>
 </Information>

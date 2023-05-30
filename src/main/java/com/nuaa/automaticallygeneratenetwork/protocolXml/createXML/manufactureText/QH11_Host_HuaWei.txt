@@ -1,0 +1,229 @@
+display current-configuration
+!Software Version V800R012C10SPC300
+#
+sysname QH11
+#
+set neid 80e38f
+#
+undo FTP server-source all-interface
+undo FTP ipv6 server-source all-interface
+#
+info-center loghost source LoopBack0
+info-center loghost 10.10.8.4
+info-center loghost 10.10.8.100
+info-center loghost 10.100.39.196
+#
+set service-mode forwarding-mode compatible
+#
+undo user-security-policy enable
+#
+service-template template-default0
+#
+service-template template-default1
+#
+service-template template-default2
+#
+service-template template-default3
+#
+service-template template-default4
+#
+ntp-service server disable
+ntp-service ipv6 server disable
+ntp-service server source-interface all disable
+ntp-service ipv6 server source-interface all disable
+ntp-service unicast-server 10.144.0.1 preference
+ntp-service unicast-server 10.104.0.1
+#
+undo icmp name timestamp-reply send
+#
+router id 10.102.15.21
+#
+undo telnet ipv6 server enable
+telnet server-source all-interface
+undo telnet ipv6 server-source all-interface
+#
+diffserv domain default
+ #
+diffserv domain 5p3d
+#
+soc
+#
+undo radius local-ip all
+#
+mpls lsr-id 10.102.15.21
+#
+mpls
+#
+mpls ldp
+ #
+ ipv4-family
+#
+dhcp server request-packet all-interface disable
+#
+dot1x-template 1
+ #
+security password
+ #
+ rule admin
+  forbidden word changeme_123
+license
+#
+isis 11
+ is-level level-1-2
+ cost-style wide
+ bfd all-interfaces enable
+ bfd all-interfaces min-tx-interval 1000 min-rx-interval 1000
+ network-entity 10.7307.1921.6801.5021.00
+ is-name aaaa
+ preference 20
+#
+interface Virtual-Template0
+ ppp authentication-mode auto
+#
+interface GigabitEthernet0/0/0
+ speed auto
+ duplex auto
+ undo shutdown
+#
+interface eth1
+ negotiation auto
+ description acd.M6000-8S-GEI-0/5/1/2-1000M
+ undo shutdown
+ ip address 192.168.89.2 255.255.255.0
+ isis enable 11
+ isis cost 4000
+ mpls
+ mpls ldp
+ undo dcn
+#
+interface GigabitEthernet1/0/1
+ undo shutdown
+ undo dcn
+#
+interface GigabitEthernet1/0/2
+ undo shutdown
+ undo dcn
+#
+interface NULL0
+ #
+bgp 100
+ router-id 10.102.48.1
+ peer 10.10.0.52 as-number 54
+ peer 10.10.0.52 description dsaRR2
+ peer 10.10.0.52 connect-interface LoopBack0
+ peer 10.11.0.52 as-number 54
+ peer 10.11.0.52 description dewRR2
+ peer 10.11.0.52 connect-interface LoopBack0
+ peer 10.100.0.52 as-number 54
+ peer 10.100.0.52 description eedRR2
+ peer 10.100.0.52 connect-interface LoopBack0
+ peer 10.101.0.52 as-number 54
+ peer 10.101.0.52 description ddeRR2
+ peer 10.101.0.52 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  dampening 15 750 6000 16000
+  preference 10 100 255
+  network 192.168.81.0 255.255.255.0 route-policy rmuser_dhy
+  network 192.168.82.0 255.255.255.0 route-policy rmuser_dhy
+  network 192.168.83.0 255.255.255.0 route-policy rmuser_dhy
+  maximum load-balancing ibgp 4
+  peer 192.168.81.1 enable
+  peer 192.168.81.1 last-hop-local
+  peer 192.168.81.1 advertise-community
+  peer 192.168.82.2 enable
+  peer 192.168.82.2 next-hop-local
+  peer 192.168.82.2 advertise-community
+  peer 192.168.83.2 enable
+  peer 192.168.83.2 next-hop-local
+  peer 192.168.83.2 advertise-community
+#
+ospf 100 router-id 10.102.48.1
+ default-route-advertise always
+ preference 30
+ area 0.0.0.0
+  network 192.168.81.0 255.255.255.0 description ddeeJieRu
+#
+undo dcn
+ #
+route-policy rmuser_dhy permit node 10
+ apply community 10:1071
+#
+snmp-agent
+snmp-agent local-engineid 800007DB03B4093153C782
+#
+snmp-agent sys-info version v3
+snmp-agent group v3 ipnmgroup noauthentication read-view ipnmview write-view ipnmview notify-view ipnmview
+snmp-agent group v3 ipnmgroup authentication read-view ipnmview write-view ipnmview notify-view ipnmview
+snmp-agent target-host host-name __targetHost_1_26186 trap address udp-domain 10.10.8.100 params securityname ipnmuser v3
+snmp-agent target-host host-name __targetHost_2_38158 trap address udp-domain 10.10.8.2 params securityname ipnmuser v3
+#
+snmp-agent mib-view included ipnmview iso
+snmp-agent usm-user v3 ipnmuser
+snmp-agent usm-user v3 ipnmuser group ipnmgroup
+snmp-agent usm-user v3 ipnmuser authentication-mode md5 cipher abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc
+#
+snmp-agent protocol source-status all-interface
+undo snmp-agent protocol source-status ipv6 all-interface
+#
+undo snmp-agent proxy protocol source-status all-interface
+undo snmp-agent proxy protocol source-status ipv6 all-interface
+ #
+lldp enable
+#
+undo web-auth-server source-ip all
+#
+undo web-auth-server source-ipv6 all
+#
+stelnet server enable
+snetconf server enable
+ssh user root
+ssh user root authentication-type password
+ssh user root service-type snetconf stelnet
+ssh user zbl1ydhy
+ssh user zbl1ydhy authentication-type password
+ssh user zbl1ydhy service-type all
+ssh server-source all-interface
+ssh ipv6 server-source all-interface
+ssh authorization-type default aaa
+#
+ssh server cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr
+ssh server hmac sha2_512 sha2_256
+ssh server key-exchange dh_group_exchange_sha256 dh_group_exchange_sha1 dh_group14_sha1 ecdh_sha2_nistp256 ecdh_sha2_nistp384 ecdh_sha2_nistp521
+#
+ ssh server publickey ecc rsa rsa_sha2_256 rsa_sha2_512
+#
+ssh server dh-exchange min-len 3072
+#
+ssh client first-time enable
+#
+ssh client publickey ecc rsa rsa_sha2_256 rsa_sha2_512
+#
+ssh client cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr
+ssh client hmac sha2_512 sha2_256
+ssh client key-exchange dh_group_exchange_sha256 dh_group_exchange_sha1 dh_group14_sha1 ecdh_sha2_nistp256 ecdh_sha2_nistp384 ecdh_sha2_nistp521
+#
+user-interface maximum-vty 21
+#
+user-interface con 0
+ authentication-mode password
+ set authentication password cipher abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd
+#
+user-interface aux 0
+#
+user-interface vty 0 4
+ authentication-mode aaa
+ user privilege level 3
+ #
+netconf
+ activate module huawei-ip
+#
+local-aaa-server
+#
+l2tp-group default-lac
+ tunnel name HUAWEI
+#
+l2tp-group default-lns
+ tunnel name HUAWEI
+#

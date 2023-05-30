@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Information>
     <type>host</type><!--描述为路由器router或者主机host-->
     <lxd_name>QH3</lxd_name>

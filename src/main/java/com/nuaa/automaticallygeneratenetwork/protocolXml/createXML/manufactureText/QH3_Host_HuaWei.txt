@@ -1,7 +1,7 @@
 display current-configuration
 !Software Version V800R012C10SPC300
 #
-sysname QRTest1
+sysname QH3
 #
 set neid 80e38f
 #
@@ -61,20 +61,6 @@ mpls ldp
 dhcp server request-packet all-interface disable
 #
 dot1x-template 1
-#
-acl number 3001
- rule 5 permit tcp destination-port eq 1433
- rule 10 permit udp destination-port eq 1433
- rule 15 permit ip source 11.10.40.0 0.0.0.255
- rule 20 permit ip source 11.11.24.0 0.0.0.255
- rule 25 deny tcp destination-port eq 139
- rule 30 deny tcp destination-port eq 135
- rule 35 deny tcp destination-port eq 445
- rule 40 deny tcp destination-port eq 539
- rule 45 deny tcp destination-port eq 593
- rule 50 deny tcp destination-port eq 1521
- rule 55 deny tcp destination-port eq 2000
- rule 60 deny tcp destination-port eq 2001
  #
 security password
  #
@@ -103,29 +89,7 @@ interface eth1
  negotiation auto
  description acd.M6000-8S-GEI-0/5/1/2-1000M
  undo shutdown
- ip address 192.168.81.2 255.255.255.0
- isis enable 11
- isis cost 4000
- mpls
- mpls ldp
- undo dcn
-#
-interface eth2
- negotiation auto
- description acd.M6000-8S-GEI-0/5/1/2-1000M
- undo shutdown
- ip address 192.168.82.1 255.255.255.0
- isis enable 11
- isis cost 4000
- mpls
- mpls ldp
- undo dcn
-#
-interface eth3
- negotiation auto
- description acd.M6000-8S-GEI-0/5/1/2-1000M
- undo shutdown
- ip address 192.168.83.1 255.255.255.0
+ ip address 192.168.86.2 255.255.255.0
  isis enable 11
  isis cost 4000
  mpls

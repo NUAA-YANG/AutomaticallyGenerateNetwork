@@ -37,6 +37,6 @@ public class test {
         System.out.println("manufacturer HuaWei".contains("ZhongXing"));
         System.out.println("manufacturer HuaWei".contains("HuaWei"));
 
-        System.out.println(new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl/QR2.txt").getName());
+        System.out.println(new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl/QR2_ZhongXing.txt").getName());
     }
 }

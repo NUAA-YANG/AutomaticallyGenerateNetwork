@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Information>
     <type>router</type><!--描述为路由器router或者主机host-->
     <lxd_name>QR4</lxd_name>
@@ -8,10 +7,15 @@
             <ipAddress>192.168.85.2</ipAddress>
             <subnetMask>24</subnetMask>
         </interface>
-        <interface>
+        <interface><!--描述详细接口信息-->
             <name>eth2</name>
-            <ip_address>192.168.86.1</ip_address>
-            <subnet_mask>24</subnet_mask>
+            <ipAddress>192.168.86.1</ipAddress>
+            <subnetMask>24</subnetMask>
+        </interface>
+        <interface><!--描述详细接口信息-->
+            <name>eth3</name>
+            <ipAddress>192.168.91.1</ipAddress>
+            <subnetMask>24</subnetMask>
         </interface>
     </interfaces>
     <protocol><!--描述协议信息-->
@@ -19,7 +23,9 @@
             <ospf_network><!--ospf的邻接点-->
                 <ip>192.168.85.0/24</ip>
                 <ip>192.168.86.0/24</ip>
+                <ip>192.168.91.0/24</ip>
             </ospf_network>
+            <ospf_redistribute>bgp</ospf_redistribute><!--重转发网络协议-->
         </ospf>
     </protocol>
 </Information>

@@ -1,0 +1,4 @@
+manufacturer ZhongXing
+rule 10 permit ip 192.168.86.2 0.0.0.255 any
+rule 15 permit ip 192.168.91.2 0.0.0.255 any
+rule 20 deny ip any 255.255.255.255 192.168.88.2 0.0.0.0
