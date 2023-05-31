@@ -1,6 +1,8 @@
 package com.nuaa.automaticallygeneratenetwork.protocolXml.finalHandle;
 
-import java.io.File;
+import com.nuaa.automaticallygeneratenetwork.pojo.Iptables;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,32 +13,14 @@ import java.util.Collections;
  * @Java-version jdk1.8
  */
 public class test {
-    public static void main(String[] args) {
-        System.out.println(String.format("%04d", 1));
+    public static void main(String[] args) throws IOException {
+        File file = new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl/QR3_HuaWei.txt");
+        //创建读取流
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        String line = null;
+        while ((line=reader.readLine())!=null && !"".equals(line)){
+            System.out.println("内容："+line);
+        }
 
-        //复制列表
-//        ArrayList<String> arrayList1 = new ArrayList<>();
-//        arrayList1.add("哼哼");
-//        arrayList1.add("小哈");
-//        arrayList1.add("开心");
-//        System.out.println(arrayList1);
-//        arrayList1.remove("小哈");
-//        System.out.println(arrayList1);
-//        ArrayList<String> arrayList2 = new ArrayList<>(Arrays.asList(new String[arrayList1.size()]));
-//        Collections.copy(arrayList2,arrayList1);
-//        System.out.println(arrayList2);
-
-//        String[] split = ";192.168.81.1/24;192.168.83.1/24;".split(";");
-//        System.out.println(split.length);
-//        System.out.println(Arrays.toString(split));
-
-
-        System.out.println("echo \""+"#!/bin/bash"+"\" >> /root/AutoNetwork/LxdBash.sh");
-
-        System.out.println("manufacturer ZhongXing".contains("ZhongXing"));
-        System.out.println("manufacturer HuaWei".contains("ZhongXing"));
-        System.out.println("manufacturer HuaWei".contains("HuaWei"));
-
-        System.out.println(new File("src/main/java/com/nuaa/automaticallygeneratenetwork/protocolAcl/acl/QR2_ZhongXing.txt").getName());
     }
 }

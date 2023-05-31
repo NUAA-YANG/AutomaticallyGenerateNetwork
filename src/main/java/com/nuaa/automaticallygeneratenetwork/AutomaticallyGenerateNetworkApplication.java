@@ -108,9 +108,9 @@ public class AutomaticallyGenerateNetworkApplication {
 
 
 
-        System.out.println("=========================9. ACL转化为Iptables写入数据库====================");
-        AclToIptables aclToIptables = context.getBean(AclToIptables.class);
-        aclToIptables.turnToIptables(aclPath);
+//        System.out.println("=========================9. ACL转化为Iptables写入数据库====================");
+//        AclToIptables aclToIptables = context.getBean(AclToIptables.class);
+//        aclToIptables.turnToIptables(aclPath);
 
 
 //        System.out.println("=========================10. 生成防火墙相关配置文件及脚本====================");
@@ -118,13 +118,13 @@ public class AutomaticallyGenerateNetworkApplication {
 //        List<String> cmds10 = completeConversion.finalConversion(aclPath);
 //        execLinuxCommands.getCmdResult(session,cmds10);
 //        cmds10.forEach(x-> System.out.println(x));
-//
-//
-//        System.out.println("===========================11. 替换防火墙配置文件============================");
-//        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
-//        List<String> cmds11 = fileRulePush.pushRule(aclPath);
-//        execLinuxCommands.getCmdResult(session,cmds11);
-//        cmds11.forEach(x-> System.out.println(x));
+
+
+        System.out.println("===========================11. 替换防火墙配置文件============================");
+        FileRulePush fileRulePush = context.getBean(FileRulePush.class);
+        List<String> cmds11 = fileRulePush.pushRule(aclPath);
+        execLinuxCommands.getCmdResult(session,cmds11);
+        cmds11.forEach(x-> System.out.println(x));
 
 
         //关闭服务器连接

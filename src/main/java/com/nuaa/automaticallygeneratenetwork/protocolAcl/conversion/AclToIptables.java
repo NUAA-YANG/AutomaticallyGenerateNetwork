@@ -79,7 +79,11 @@ public class AclToIptables {
         Matcher matcher = pattern.matcher(line);
         //用于记录属性
         List<String> proList = new ArrayList<>();
+        //起始为null，只有匹配成功才创建类
+        Iptables iptables = null;
+        //匹配成功才封装属性
         if (matcher.find()){
+            iptables = new Iptables();
             //将属性封装到集合当中
             for (int i = 1 ; i<17 ; i++){
                 if (matcher.group(i)!=null){
@@ -88,44 +92,42 @@ public class AclToIptables {
                     proList.add(null);
                 }
             }
-        }
 
+            //将集合中的属性转化为实体类
+            iptables.setId(0);
+            iptables.setManufacturer(manufacturer);
+            iptables.setLxdName(lxdName);
+            iptables.setTableName("filter");
+            iptables.setRule("A");
+            iptables.setChain("FORWARD");
 
-        Iptables iptables = new Iptables();
+            if (proList.size()>0){
+                iptables.setJudge(proList.get(0));
+                iptables.setProtocol(proList.get(1));
 
-        //将集合中的属性转化为实体类
-        iptables.setId(0);
-        iptables.setManufacturer(manufacturer);
-        iptables.setLxdName(lxdName);
-        iptables.setTableName("filter");
-        iptables.setRule("A");
-        iptables.setChain("FORWARD");
+                iptables.setSIp(proList.get(2));
+                if (proList.get(3)!=null){
+                    //将二进制的子网掩码转化为数字
+                    iptables.setSNetmask(netmaskUtils.netmaskToNum(proList.get(3)));
+                }
+                iptables.setSRange(proList.get(4));
+                iptables.setSStartPort(proList.get(5));
+                iptables.setSDestPort(proList.get(6));
+                iptables.setSEq(proList.get(7));
+                iptables.setSPort(proList.get(8));
 
-        if (proList.size()>0){
-            iptables.setJudge(proList.get(0));
-            iptables.setProtocol(proList.get(1));
-
-            iptables.setSIp(proList.get(2));
-            if (proList.get(3)!=null){
-                //将二进制的子网掩码转化为数字
-                iptables.setSNetmask(netmaskUtils.netmaskToNum(proList.get(3)));
+                iptables.setDIp(proList.get(9));
+                if (proList.get(10)!=null){
+                    //将二进制的子网掩码转化为数字
+                    iptables.setDNetmask(netmaskUtils.netmaskToNum(proList.get(10)));
+                }
+                iptables.setDRange(proList.get(11));
+                iptables.setDStartPort(proList.get(12));
+                iptables.setDDestPort(proList.get(13));
+                iptables.setDEq(proList.get(14));
+                iptables.setDPort(proList.get(15));
             }
-            iptables.setSRange(proList.get(4));
-            iptables.setSStartPort(proList.get(5));
-            iptables.setSDestPort(proList.get(6));
-            iptables.setSEq(proList.get(7));
-            iptables.setSPort(proList.get(8));
 
-            iptables.setDIp(proList.get(9));
-            if (proList.get(10)!=null){
-                //将二进制的子网掩码转化为数字
-                iptables.setDNetmask(netmaskUtils.netmaskToNum(proList.get(10)));
-            }
-            iptables.setDRange(proList.get(11));
-            iptables.setDStartPort(proList.get(12));
-            iptables.setDDestPort(proList.get(13));
-            iptables.setDEq(proList.get(14));
-            iptables.setDPort(proList.get(15));
         }
 
         return iptables;
@@ -144,9 +146,11 @@ public class AclToIptables {
         //创建读取流
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         String line = null;
-        while ((line=reader.readLine())!=null){
+        while ((line=reader.readLine())!=null && !"".equals(line)){
             Iptables iptables = turnLineToIptables(line, lxdName, manufacturer);
-            iptablesList.add(iptables);
+            if (iptables!=null){
+                iptablesList.add(iptables);
+            }
         }
         return iptablesList;
     }

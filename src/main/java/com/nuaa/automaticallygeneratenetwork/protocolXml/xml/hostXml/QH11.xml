@@ -1,0 +1,11 @@
+<Information>
+    <type>host</type><!--描述为路由器router或者主机host-->
+    <lxd_name>QH11</lxd_name>
+    <interfaces><!--描述接口信息-->
+        <interface><!--描述详细接口信息-->
+            <name>eth1</name>
+            <ipAddress>192.168.89.2</ipAddress>
+            <subnetMask>24</subnetMask>
+        </interface>
+    </interfaces>
+</Information>

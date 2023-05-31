@@ -24,7 +24,9 @@ public class FileRulePush {
         //获取目录下的所有文件名称
         String[] fileArray = new File(aclPathName).list();
         for (String name:fileArray){
-            String lxdName = name.split("\\.")[0];
+            String lxdName = name.split("_")[0];
+            //0.先下载防火墙
+            cmds.add("lxc exec "+lxdName+" -- apt-get install iptables -y;");
             //1. 先替换防火墙的配置文件
             cmds.add("lxc file push /root/AutoNetwork/"+lxdName+"/iptables.rules "+lxdName+"/etc/");
             //2. 然后替换保存防火墙的脚本文件
